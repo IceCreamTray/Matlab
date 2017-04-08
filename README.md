@@ -1,3 +1,5 @@
 # Matlab #
 
-Matlab scripts applied to specific engineering problems.
+Matlab scripts applied to specific engineering and numeric analysis problems.
+
+Language: italian
