@@ -1,5 +1,5 @@
 %% Metodo di Newton
-function[xv, fxv, n, flag] = newtonfun(f, f1, x0, toll, nmax)
+function[xv, fxv, n, flag] = Newtonfun(f, f1, x0, toll, nmax)
 	n = 1;
 	xv = [];
 	xv(1) = x0;
