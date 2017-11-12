@@ -111,13 +111,13 @@ legend('CO','H2');
 
 %%
 %Define selectivities plot
-sh2 = (Ni(:,2) - Ni0(2)) / (Ni0(3) - Ni(:,3)) * 1/4;
-sco = (Ni(:,1) - Ni0(1)) / (Ni0(3) - Ni(:,3));
+sh2 = (Ni(:,2) - Ni0(2)) ./ (Ni0(3) - Ni(:,3)) * 1/4;
+sco = (Ni(:,1) - Ni0(1)) ./ (Ni0(3) - Ni(:,3));
 
 figure (5)
 
-plot(vol, sh2(:,46), '-r', 'LineWidth', 1.5), hold on, grid on
-plot(vol, sco(:,46), 'LineWidth', 1.5) 
+plot(vol, sh2, '-r', 'LineWidth', 1.5), hold on, grid on
+plot(vol, sco, 'LineWidth', 1.5) 
 legend('H2','CO');
 l = line([4.18e-03 4.18e-03], [0 1]);
 set(l, 'LineStyle', '--', 'Color', 'black');
