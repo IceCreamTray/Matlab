@@ -1,10 +1,10 @@
-function [PFR] = BMiBe(vol,Y,nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai)
+function [PFR,QR] = BMiBe(vol,Y,nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai)
 Ni = Y(1:5);
 Tk = Y(6);
 disp(Tk);
 kpj = [exp(30.481 - 27.187e+03 / Tk) exp(-3.924 + 4.291e+03 / Tk) exp(26.891 - 23.258e+03 / Tk)]';
-kj = Aj .* (exp(-Ej ./ (Rg .* Tk)));
-ki = Ai .* (exp(-DHi ./ (Rg .* Tk)));
+kj = Aj .* (exp(-Ej ./ (Rg * Tk)));
+ki = Ai .* (exp(-DHi ./ (Rg * Tk)));
 
 % Define partial pressure as function of molar flowrates  
 Ntot=sum(Ni);
@@ -34,7 +34,7 @@ r = nu * R;
 
 %Energy balance 
 Tfun =(Q - (vol*ro_bulk/phi).*(R'*DHj))./(Ntot*10^-3*cp_mix);
-
+QR = -vol.*(R'*DHj);
 % Define function to integrate
 PFR = [(r * (ro_bulk/phi)); Tfun];
 end

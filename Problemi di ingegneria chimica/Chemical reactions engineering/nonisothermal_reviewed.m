@@ -12,7 +12,7 @@ Rg = 8.3145*10^-3;                                  % KJ/ K mol
 % Initialize kinetic and equilibrium parameters
 Aj = [4.225e+15 1.955e+06 1.020e+15]';            % with j = 1,2,3 - bar^-1
 Ai = [8.23e-05 6.12e-09 6.65e-04 1.77e+05]';      % with i = CO,H2,CH4,H2O - bar^-1, adim
-Ej = [240.1 67.13 243.9];                         % Kj /mol
+Ej = [240.1 67.13 243.9]';                         % Kj /mol
 DHi = [-70.65 -82.90 -38.28 88.68]';              % Kj/mol
 ro_bulk = 1900;                                   % Kg/m3_reactor
 phi = 0.6;                                        % adim
@@ -45,6 +45,12 @@ nu=[+1 -1 0
 Ni = Y(:,1:5);
 Nitot = sum(Ni');
 Tk = Y(:,6);
+
+for u=1:length(vol)
+	[QR] = BMiBe1(vol(u),Y(u,:),nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+	QRvec=QR
+end
+
 
 
 %% Plots
@@ -119,7 +125,11 @@ title('Conversion of methane along reactor volume');
 l = refline(0, 0.5);
 set(l, 'LineStyle', '--', 'Color', 'black');
 
-
+figure
+plot(vol,QRvec*10^2,'-o','LineWidth',1.5);
+xlabel('Volume of catalyst[m^3]');
+ylabel('Heat of reaction [KJ]');
+title('Heat of reaction vs volume of catalyst');
 
 % 
 % %%
