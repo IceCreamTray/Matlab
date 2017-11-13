@@ -4,21 +4,21 @@ clc, clear all, close all
 
 % Initialize operating conditions
 T = 650+273.15;                                   % Kelvin
-P = 5;                                            % bar
+P = 5;                                            % Pa
 
 % Initialize constants
-Rg = 8.3145e-03;                                  % bar/m3 K kmol
+Rg = 8.3145*10^-3;                                  % KJ/ K mol
 
 % Initialize kinetic and equilibrium parameters
 Aj = [4.225e+15 1.955e+06 1.020e+15]';            % with j = 1,2,3 - bar^-1
 Ai = [8.23e-05 6.12e-09 6.65e-04 1.77e+05]';      % with i = CO,H2,CH4,H2O - bar^-1, adim
-Ej = [240.1 67.13 243.9]';                        % bar m3/kmol
-DHi = [-70.65 -82.90 -38.28 88.68]';              % bar m3/kmol
+Ej = [240.1 67.13 243.9];                         % Kj /mol
+DHi = [-70.65 -82.90 -38.28 88.68]';              % Kj/mol
 ro_bulk = 1900;                                   % Kg/m3_reactor
 phi = 0.6;                                        % adim
 
 % Constants definition
-ai = [0.716 0.370 5.529 1.558 1.593] * 10^3;
+ai = [0.716 0.370 5.529 1.558 1.593] / 10^3;
 bi = [3.269 3.266 3.292 3.409 4.925];
 
 
@@ -31,7 +31,7 @@ bi = [3.269 3.266 3.292 3.409 4.925];
 % Calculate kinetic constants
 
 % Inlet molar flow rates
-Y0 = ([0 2.63.*3.6 50.*3.6 150.*3.6 0 T]');                % from mol/s to kmol/h           
+Y0 = ([0*3.6 2.63.*3.6 50.*3.6 150.*3.6 0*3.6 T]');                % from mol/s to kmol/h           
 Ni0 = Y0(1:5);
 % Define stoichiometric matrix
 nu=[+1 -1 0
