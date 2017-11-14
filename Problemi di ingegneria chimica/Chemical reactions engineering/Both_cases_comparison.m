@@ -80,14 +80,19 @@ xlabel('Volume of catalyst [L]');
 ylabel('Total molar flow rate [kmol/h]');
 title('Flow rate profile along the volume of catalyst');
 
-%% Define molar fractions plot (A)
-x = bsxfun(@rdivide,[Ni(:,1) Ni(:,2) Ni(:,3) Ni(:,4) Ni(:,5)],Nitot');
+%% Define dry molar fractions plot (A)
+x = bsxfun(@rdivide,[Ni(:,1) Ni(:,2) Ni(:,3) Ni(:,5)],Nitot');
+Nisodry = [Niso(:,1), Niso(:,2), Niso(:,3), Niso(:,5)]';
+Ndry_tot_iso = sum(Nisodry);
+xdryiso = bsxfun(@rdivide, Nisodry, Ndry_tot_iso);
+
 figure 
-plot(vol*10^3,x,'-o','Linewidth',1.5), hold on
+plot(vol*10^3,x,'-r','Linewidth',1.5), hold on
+plot(volu*10^3, xdryiso,'Color', 'Blue', 'LineWidth', 1.5)
 xlabel('Volume of catalyst [L]');
 ylabel('Molar fractions of species');
 title('Molar fractions profiles along the volume of catalyst');
-legend('CO', 'H2','H2O', 'CH4', 'CO2');
+
 
 %% Temprerature plot (C)
 figure 
