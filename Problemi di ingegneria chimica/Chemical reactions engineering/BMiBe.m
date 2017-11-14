@@ -15,7 +15,8 @@ DH2 = -271.4 * (Tk^ -0.2977);
 DH3 = 99.52 * (Tk^0.0937);
 DHj = ([DH1 DH2 DH3])'*10 ;    
 cpi = (((ai.*Tk + bi).* Rg))';
-Q = 0;
+%Q = 300*10^3;                          %kJ/m3s
+Q=0;
 somma=(Ni*10^-3.*cpi);
 contribute = sum(somma');
 % Calculate reaction rates

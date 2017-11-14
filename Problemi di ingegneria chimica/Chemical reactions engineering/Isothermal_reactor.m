@@ -94,7 +94,7 @@ set(l, 'LineStyle', '--', 'Color', 'black');
 
 %%
 % Define yields plots
-yi_h2_ch4 = ((Ni(:,2) - Ni0(2)) ./ (Ni0(3))) .* (1/3.5);
+yi_h2_ch4 = ((Ni(:,2) - Ni0(2)) ./ (Ni0(3))) .* (1/4);
 yi_co_ch4 = (Ni(:,1) ./ Ni0(3));
 
 figure (4)
