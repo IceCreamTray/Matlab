@@ -115,12 +115,55 @@ ylabel('Conversion of Methane');
 title('Conversion vs Temperature');
 
 
+%% Define yields plots
+yi_h2_ch4_iso = ((Niso(:,2) - Niso0(2)) ./ (Niso0(3))) .* (1/4);
+yi_h2_ch4 = ((Ni(:,2) - Ni0(2)) ./ (Ni0(3))) .* (1/4);
+yi_co_ch4_iso = (Niso(:,1) ./ Niso0(3));
+yi_co_ch4 = (Ni(:,1) ./ Ni0(3));
+
+figure
+plot (volu*10^3, yi_co_ch4_iso,'Color','Blue', 'LineWidth', 1.5), hold on, grid on
+plot(volu*10^3, yi_h2_ch4_iso, 'Color','Blue', 'LineWidth', 1.5)
+plot (vol*10^3, yi_co_ch4,'-r', 'LineWidth', 1.5), hold on, grid on
+plot(vol*10^3, yi_h2_ch4, '-r', 'LineWidth', 1.5)
+xlabel('Volume of catalyst [L]');
+ylabel('Yield of H2 and CO on CH4');
+title('Yield of H2 and CO on CH4 along the volume of catalyst');
 
 
+%% Define selectivities plot
+sh2 = (Ni(:,2) - Ni0(2)) ./ (Ni0(3) - Ni(:,3)) * 1/4;
+sco = (Ni(:,1) - Ni0(1)) ./ (Ni0(3) - Ni(:,3));
+sh2iso = (Niso(:,2) - Niso0(2)) ./ (Niso0(3) - Niso(:,3)) * 1/4;
+scoiso = (Niso(:,1) - Niso0(1)) ./ (Niso0(3) - Niso(:,3));
 
+figure
 
+plot(vol*10^3, sh2, '-r', 'LineWidth', 1.5), hold on, grid on
+plot(vol*10^3, sco,'-r', 'LineWidth', 1.5) 
+plot(volu*10^3, sh2iso, 'Color','Blue', 'LineWidth', 1.5), hold on, grid on
+plot(volu*10^3, scoiso,'Color','Blue', 'LineWidth', 1.5) 
+xlabel('Volume of catalyst [L]');
+ylabel('Selectivity of H2,CO on CH4');
+title('Selectivities of H2,CO on CH4 along the volume of catalyst');
 
+%% Residence time
+voliso = ((Niso * 3.6).* (Rg ./ 1000 * T)) ./ P;
+volflow_totiso = voliso(:,1) + voliso(:,2) + voliso(:,3) + voliso(:,4) + voliso(:,5);
+h = cumtrapz(volu,1 ./ (volflow_totiso));
 
+volno = ((Ni .* 3.6).* (Rg ./ 1000 .* Tk)) ./ P;
+volflow_tot = volno(:,1) + volno(:,2) + volno(:,3) + volno(:,4) + volno(:,5);
+
+hno = cumtrapz(vol,1 ./ (volflow_tot));
+
+figure
+
+plot(volu*10^3, h * 10 ^ 3,'Color','Blue', 'LineWidth', 1.5), hold on
+plot(vol*10^3, hno * 10 ^ 3,'-r', 'LineWidth', 1.5), hold on
+xlabel('Volume of catalyst [L]');
+ylabel('Residence time [ms]');
+title('Residence time profile along the volume of catalyst');
 
 %% Heat of reaction
 figure
