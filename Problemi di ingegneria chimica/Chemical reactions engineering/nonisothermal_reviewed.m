@@ -31,7 +31,7 @@ bi = [3.269 3.266 3.292 3.409 4.925];
 % Calculate kinetic constants
 
 % Inlet molar flow rates
-Y0 = ([0*3.6 2.63.*3.6 50.*3.6 150.*3.6 0*3.6 T]');                % from mol/s to kmol/h           
+Y0 = ([0*3.6 2.63.*3.6 50.*3.6 150.*3.6 0*3.6 T]);                % from mol/s to kmol/h           
 Ni0 = Y0(1:5);
 % Define stoichiometric matrix
 nu=[+1 -1 0
@@ -47,10 +47,9 @@ Nitot = sum(Ni');
 Tk = Y(:,6);
 
 for u=1:length(vol)
-	[QR] = BMiBe1(vol(u),Y(u,:),nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
-	QRvec=QR
+	[PFR,QR] = BMiBe(vol(u),Y(u,1:6),nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+	Qvec(u)=QR;
 end
-
 
 
 %% Plots
@@ -126,7 +125,7 @@ l = refline(0, 0.5);
 set(l, 'LineStyle', '--', 'Color', 'black');
 
 figure
-plot(vol,QRvec*10^2,'-o','LineWidth',1.5);
+plot(vol,Qvec*10^2,'-o','LineWidth',1.5);
 xlabel('Volume of catalyst[m^3]');
 ylabel('Heat of reaction [KJ]');
 title('Heat of reaction vs volume of catalyst');
