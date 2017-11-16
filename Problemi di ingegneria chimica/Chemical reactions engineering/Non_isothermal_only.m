@@ -42,7 +42,7 @@ nu=[+1 -1 0
 
 %% Integration
 %Non isothermal
-[vol,Y] = ode15s(@BMiBe,[0 0.008],Y0,[],nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+[vol,Y] = ode15s(@BMiBe,[0 0.000008],Y0,[],nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
 Ni = Y(:,1:5);
 Nitot = sum(Ni');
 Tk = Y(:,6);
@@ -60,7 +60,7 @@ end
 figure
 
 Nprof = [Ni(:,1) Ni(:,2) Ni(:,3) Ni(:,4) Ni(:,5)];
-plot(vol*10^3, Nprof, '-o', 'LineWidth', 1.5), hold on
+plot(vol, Nprof, '-o', 'LineWidth', 1.5), hold on
 legend('CO', 'H2','H2O', 'CH4', 'CO2');
 xlabel('Volume of catalyst [L]');
 ylabel('Molar flow rate of species [kmol/h]');
@@ -76,7 +76,7 @@ title('Flow rate profile along the volume of catalyst');
 %% Define molar fractions plot (A)
 x = bsxfun(@rdivide,[Ni(:,1) Ni(:,2) Ni(:,3) Ni(:,4) Ni(:,5)],Nitot');
 figure 
-plot(vol*10^3,x,'-o','Linewidth',1.5), hold on
+plot(vol,x,'-o','Linewidth',1.5), hold on
 xlabel('Volume of catalyst [L]');
 ylabel('Molar fractions of species');
 title('Molar fractions profiles along the volume of catalyst');
@@ -84,7 +84,7 @@ legend('CO', 'H2','H2O', 'CH4', 'CO2');
 
 %% Temprerature plot (C)
 figure 
-plot(vol*10^3,Tk-273.15,'-o','LineWidth',1.5)
+plot(vol,Tk-273.15,'-o','LineWidth',1.5)
 xlabel('Volume of catalyst [L]');
 ylabel('Temperature(°C)');
 title('Temperature profile along the volume of catalyst');
@@ -98,7 +98,7 @@ ylabel('Conversion of Methane');
 title('Conversion vs Temperature');
 %vs volume
 figure
-plot(vol*10^3,conv_CH4,'Linewidth',1.5);
+plot(vol,conv_CH4,'Linewidth',1.5);
 xlabel('Volume of catalyst[L]');
 ylabel('Conversion of Methane');
 title('Conversion of methane along reactor volume');
@@ -107,7 +107,7 @@ set(l, 'LineStyle', '--', 'Color', 'black');
 
 %% Heat of reaction
 figure
-plot(vol*10^3,Qvec*10^2,'-o','LineWidth',1.5);
+plot(vol,Qvec,'-o','LineWidth',1.5);
 xlabel('Volume of catalyst[L]');
 ylabel('Heat of reaction [KJ]');
 title('Heat of reaction vs volume of catalyst');
