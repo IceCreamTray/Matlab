@@ -1,4 +1,4 @@
-function [PFR,QR] = BMiBe(vol,Y,nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai)
+function [PFR,QR2] = BMiBe(vol,Y,nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai)
 Ni = Y(1:5);
 Tk = Y(6);
 kpj = [exp(30.481 - 27.187e+03 / Tk) exp(-3.924 + 4.291e+03 / Tk) exp(26.891 - 23.258e+03 / Tk)]';
@@ -10,13 +10,13 @@ Ntot=sum(Ni);
 p = P * Ni ./ Ntot;       % i = CO,H2,CH4,H2O,CO2
 
 % define mole fracts
-DH1 = ((-4.47*(10^13)) * (Tk^ -4.459)) + 226.9;        
+DH1 = ((-4.47*(10^13)) * (Tk^ -4.459)) + 226.9;
 DH2 = -271.4 * (Tk^ -0.2977);
 DH3 = 99.52 * (Tk^0.0937);
-DHj = ([DH1 DH2 DH3])' ;                     
-cpi = ((ai.*Tk + bi).* Rg)';
+DHj = ([DH1 DH2 DH3])'*10^-2 ;    
+cpi = (((ai.*Tk + bi).* Rg))';
 
-somma=(Ni.*cpi);                         
+somma=(Ni*10^-3.*cpi);
 contribute = sum(somma');
 
 % Calculate reaction rates
@@ -28,14 +28,11 @@ R = [R1 R2 R3]';
 
 % Calculate production rates
 r = nu * R;
-%Q = 300                          
-Q=0;
+                         
 
-% Energy balance 
-Tfun =(Q - (vol*ro_bulk/phi).*(R'*DHj))./contribute;
 
+%Energy balance 
+Tfun = 0;
 % Define function to integrate
 PFR = [(r * (ro_bulk/phi)); Tfun'];
-QR = R'*DHj;                               
-%QR = Q;
-end
+QR2 = R'*DHj;
