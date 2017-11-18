@@ -1,6 +1,4 @@
 %% ==================== MAIN SCRIPT ====================
-% Gotta redo measure units
-% Redo energy balance
 
 format long;
 clc, clear all, close all
