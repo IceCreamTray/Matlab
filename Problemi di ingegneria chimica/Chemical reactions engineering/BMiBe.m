@@ -23,11 +23,9 @@ R = [R1 R2 R3]';
 DH1 = ((-4.47*(10^13)) * (Tk^ -4.459)) + 226.9;       
 DH2 = -271.4 * (Tk ^ -0.2977);
 DH3 = 99.52 * (Tk^0.0937);
-DHj = ([DH1 DH2 DH3])'.*10  							% bar m^3 /kmol            
-cpi = ((ai.*Tk + bi).* Rg)'
-
-             
-vtmp = ((Ni./Ntot).*cpi)
+DHj = ([DH1 DH2 DH3])' .* 10  							% bar m^3 /kmol            
+cpi = ((ai.*Tk + bi).* Rg)';							
+vtmp = (((Ni./Ntot)).*cpi)								
 cp_mix = sum(vtmp);
 
 
@@ -35,7 +33,7 @@ cp_mix = sum(vtmp);
 Q=0;
 
 % Energy balance 
-Tfun =(Q - R'*DHj)./(cp_mix)
+Tfun =(Q -(R'*DHj))./(cp_mix);
 
 % Define function to integrate
 r = nu * R

@@ -1,5 +1,5 @@
 
-% =========================== STEAM REFORMING ============================
+% =========================== STEAM REFORMING =============================
 %
 % Calculates mass balances for a packed bed differential reactor.
 % The molar flow rates are integrated upon the volume of catalyst.
@@ -16,10 +16,10 @@
 % In this application, the overall density is not constant and the reactor 
 % is considered to be working at isothermal conditions.
 %
-% ========================================================================
+% =========================================================================
 
 function Isothermal_reactor
-	%% ======================== MATERIAL BALANCE =========================
+	%% ======================== MATERIAL BALANCE ==========================
 	function [PFR] = BMi(vol, Ni, ki,kj, kpj, nu, phi, ro_bulk, P)
 		% Define partial pressure as function of molar flow rates  
 		Ntot = sum(Ni);
@@ -42,7 +42,7 @@ function Isothermal_reactor
 	end
 
 
-	%% =========================== MAIN SCRIPT ===========================
+	%% =========================== MAIN SCRIPT ============================
 
 	clc, clear all, close all;
 	format long;
