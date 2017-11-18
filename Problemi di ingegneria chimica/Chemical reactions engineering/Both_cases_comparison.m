@@ -1,6 +1,6 @@
 %% ==================== MAIN SCRIPT ====================
 format long;
-clc, clear all, close all
+%clc, clear all, close all
 
 % Initialize operating conditions
 T = 650 + 273.15;                                   % Kelvin
@@ -36,13 +36,13 @@ nu=[+1 -1  0
 %% Integration
 
 % Non isothermal
-[vol,Y] = ode15s(@BMiBe,[0 0.008],Y0,[],nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+[vol,Y] = ode15s(@BMiBe,[0 0.030],Y0,[],nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
 Ni = Y(:,1:5);
 Nitot = sum(Ni');
 Tk = Y(:,6);
 
 % Isothermal
-[volu,Niso] = ode23(@BMiso,[0 0.008],Niso0,[],nu,phi,ro_bulk,P,Aj,Ai,Ej,DHi,T,Rg);
+[volu,Niso] = ode23(@BMiso,[0 0.030],Niso0,[],nu,phi,ro_bulk,P,Aj,Ai,Ej,DHi,T,Rg);
 
 
 %% Plots
@@ -54,7 +54,7 @@ Nprofiso = [Niso(:,1) Niso(:,2) Niso(:,3) Niso(:,4) Niso(:,5)];
 
 figure
 plot(vol*10^3, Nprof,'-r', 'LineWidth', 1.5), hold on
-plot(volu*10^3, Nprofiso,'Color','Blue', 'LineWidth', 1.5);
+plot(volu*10^3, Nprofiso,'Color','Blue', 'LineWidth', 1.5),hold on
 xlabel('Volume of catalyst [L]');
 ylabel('Molar flow rate of species [kmol/h]');
 title('Flow rate profile along the volume of catalyst');
@@ -67,7 +67,7 @@ xdryiso = bsxfun(@rdivide, Nisodry, Ndry_tot_iso);
 
 figure 
 plot(vol*10^3,x,'-r','Linewidth',1.5), hold on
-plot(volu*10^3, xdryiso,'Color', 'Blue', 'LineWidth', 1.5)
+plot(volu*10^3, xdryiso,'Color', 'Blue', 'LineWidth', 1.5), hold on
 xlabel('Volume of catalyst [L]');
 ylabel('Molar fractions of species');
 title('Molar fractions profiles along the volume of catalyst');
@@ -95,7 +95,7 @@ figure
 plot (volu*10^3, yi_co_ch4_iso,'Color','Blue', 'LineWidth', 1.5), hold on, grid on
 plot(volu*10^3, yi_h2_ch4_iso, 'Color','Blue', 'LineWidth', 1.5)
 plot (vol*10^3, yi_co_ch4,'-r', 'LineWidth', 1.5), hold on, grid on
-plot(vol*10^3, yi_h2_ch4, '-r', 'LineWidth', 1.5)
+plot(vol*10^3, yi_h2_ch4, '-r', 'LineWidth', 1.5), hold on
 xlabel('Volume of catalyst [L]');
 ylabel('Yield of H2 and CO on CH4');
 title('Yield of H2 and CO on CH4 along the volume of catalyst');
@@ -112,7 +112,7 @@ figure
 plot(vol*10^3, sh2, '-r', 'LineWidth', 1.5), hold on, grid on
 plot(vol*10^3, sco,'-r', 'LineWidth', 1.5) 
 plot(volu*10^3, sh2iso, 'Color','Blue', 'LineWidth', 1.5), hold on, grid on
-plot(volu*10^3, scoiso,'Color','Blue', 'LineWidth', 1.5) 
+plot(volu*10^3, scoiso,'Color','Blue', 'LineWidth', 1.5) , hold on
 xlabel('Volume of catalyst [L]');
 ylabel('Selectivity of H2,CO on CH4');
 title('Selectivities of H2,CO on CH4 along the volume of catalyst');
@@ -138,7 +138,7 @@ title('Residence time profile along the volume of catalyst');
 %% Heat of reaction
 
 for u=1:length(vol)
-	[PFR,QR] = BMiBe(vol(u),Y(u,1:6),nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+	[PFR,QR] = BMiBe(vol(u),Y(u,1:6)',nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
 	Qvec(u)=QR;
 end
 
@@ -152,7 +152,7 @@ for u=1:length(vol)
 	[PFR,QR2] = BMiBe2(vol(u),Y(u,1:6),nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
 	Qvec2(u)=QR2;
 end
-plot(vol*10^3,Qvec2/10','Blue','LineWidth', 1.5);
+plot(vol*10^3,Qvec2/10','Blue','LineWidth', 1.5), hold on
 xlabel('Volume of catalyst[L]');
 ylabel('Heat of reaction [KJ]');
 title('Heat of reaction vs volume of catalyst');

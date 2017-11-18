@@ -2,7 +2,7 @@ function [PFR,QR] = BMiBe(vol,Y,nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai)
 Ni = Y(1:5);										% kmol/h
 disp('Ni'),disp(Ni);
 Tk = Y(6);
-%disp('Tk'), disp(Tk)% K
+disp('Tk'), disp(Tk)% K
 % Define partial pressure as function of molar flowrates  
 Ntot=sum(Ni)
 p = P * Ni ./ Ntot       % i = CO,H2,CH4,H2O,CO2
@@ -26,21 +26,19 @@ DH3 = 99.52 * (Tk^0.0937);
 DHj = ([DH1 DH2 DH3])'.*10  							% bar m^3 /kmol            
 cpi = ((ai.*Tk + bi).* Rg)'
 
-             
-vtmp = ((Ni./Ntot).*cpi)
-cp_mix = sum(vtmp);
+                        
+cp_mix = sum(((Ni./Ntot).*cpi))
 
 
-%Q = 300*10   %KW/L - Kj/s*dm^3 -   bar m^3/s*m^3                    
+%Q = 300                          
 Q=0;
 
 % Energy balance 
-Tfun =(Q - R'*DHj)./(cp_mix)
+Tfun =(Q - R'*DHj)/(cp_mix)
 
 % Define function to integrate
 r = nu * R
-rlen = length(r);
-PFR = [(r*(ro_bulk/phi)); Tfun];
+PFR = [(r * (ro_bulk/phi)); Tfun'];
 QR = R'*DHj;                               
 %QR = Q;
 end

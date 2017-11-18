@@ -23,13 +23,13 @@ T = 650+273.15;                                   % Kelvin
 P = 5;                                            % bar
 
 % Initialize constants
-Rg = 8.3145e-03;                                  % bar/m3 K kmol
+Rg = 8.3145*10^-2;                                % bar/m3 K kmol
 
 % Initialize kinetic and equilibrium parameters
 Aj = [4.225e+15 1.955e+06 1.020e+15]';            % with j = 1,2,3 - bar^-1
 Ai = [8.23e-05 6.12e-09 6.65e-04 1.77e+05]';      % with i = CO,H2,CH4,H2O - bar^-1, adim
-Ej = [240.1 67.13 243.9]';                        % bar m3/kmol
-DHi = [-70.65 -82.90 -38.28 88.68]';              % bar m3/kmol
+Ej = [240.1 67.13 243.9]'*10;                     % bar m3/kmol
+DHi = [-70.65 -82.90 -38.28 88.68]'*10;           % bar m3/kmol
 ro_bulk = 1900;                                   % Kg/m3_reactor
 phi = 0.6;                                        % adim
 
@@ -145,14 +145,14 @@ title('Outlet and inlet gas velocity ratio along the volume of catalyst');
 
 %%
 % Residence time
-volu = ((Ni * 3.6).* (Rg ./ 1000 * T)) ./ P;
+volu = ((Ni).* (Rg * T)) ./ P;
 volflow_tot = volu(:,1) + volu(:,2) + volu(:,3) + volu(:,4) + volu(:,5);
 h = cumtrapz(vol,1 ./ (volflow_tot));
 
 figure(7)
 
-plot(vol, h * 10 ^ 3,'-o', 'LineWidth', 1.5), grid on
-l = line([4.18e-03 4.18e-03],[0 2]);
+plot(vol, h*3600*1000 ,'-o', 'LineWidth', 1.5), grid on
+l = line([4.18e-03 4.18e-03],[0 4]);
 set(l, 'LineStyle', '--', 'Color', 'black');
 xlabel('Volume of catalyst [m^3]');
 ylabel('Residence time [ms]');
@@ -161,4 +161,4 @@ title('Residence time profile along the volume of catalyst');
 tau = trapz(vol, 1 ./ volflow_tot);
 format short
 disp('Residence time value at output [ms]: ');
-disp(tau * 10 ^ 3);
+disp(tau*3600*1000);
