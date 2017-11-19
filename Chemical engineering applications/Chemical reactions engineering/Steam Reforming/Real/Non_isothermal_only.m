@@ -193,6 +193,24 @@ function Non_isothermal_reactor
 	ylim([0 30000]);
 	
 	%%
+	% Enthalpies temperature dependancy plot
+	Ti = linspace(273,5000);
+	for k = 1:length(Ti)
+	DH1(k) = ((-4.47 * (10^13)) * (Ti(k)^ -4.459)) + 226.9;       
+	DH2(k) = -271.4 * (Ti(k) ^ -0.2977);
+	DH3(k) = 99.52 * (Ti(k)^0.0937);
+	end
+	
+	figure
+	plot(Ti - 273.15, DH1, 'LineWidth', 1.5), hold on
+	plot(Ti - 273.15, DH2, 'LineWidth', 1.5), hold on
+	plot(Ti - 273.15, DH3, 'LineWidth', 1.5), hold on;
+	title('Dependancy of enthalpy upon temperature');
+	xlabel('Temperature (°C)');
+	ylabel('Enthalpy [KJ/mol]');
+	xlim([0 4000]);
+	
+	%%
 	% Boyfriend contribution
 	lotsa = -10 : 0.01 : 10;
 	lo = 16 * (power(sin(lotsa), 3));
