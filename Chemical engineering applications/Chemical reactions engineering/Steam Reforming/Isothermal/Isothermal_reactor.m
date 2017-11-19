@@ -118,6 +118,8 @@ function Isothermal_reactor
 	figure
 	plot(vol * 10^3, conv_CH4, 'LineWidth', 1.5), hold on, grid on
 	l = refline(0, 0.5);
+	n = line([4.18 4.18], [0 1]);
+	set(n, 'LineStyle', '--', 'Color', 'black');
 	set(l, 'LineStyle', '--', 'Color', 'black');
 	title('Conversion of Methane along the volume of catalyst');
 	xlabel('Volume of catalyst [l]');
