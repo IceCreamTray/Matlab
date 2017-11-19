@@ -45,28 +45,34 @@ function Non_isothermal_reactor
 		DH1 = ((-4.47*(10^13)) * (Tk^ -4.459)) + 226.9;       
 		DH2 = -271.4 * (Tk ^ -0.2977);
 		DH3 = 99.52 * (Tk^0.0937);
-		DHj = ([DH1 DH2 DH3])' .* 10			% bar m^3 /kmol    
+		DHj = ([DH1 DH2 DH3])'					% Kj /mol    
 
 		% Define specific heat
-		cpi = ((ai.*Tk + bi).* Rg)';
+		cpi = ((ai.*Tk + bi).* Rg*10^-1)';
 		cp_mix = sum(((Ni./Ntot)).*cpi);
 
 		% Add heat duty if wanted
-		%Q = 300 * 10;
+		Qdot = 300 * 36/19;
 
 		% Adiabatic case
-		Q = 0;
-
+		%Qdot = 0;
+		
+		% Define heat of reaction
+		QR = -R' * DHj;
+		
+		% Define total heat
+		Q = Qdot + QR
+		
 		% Energy balance 
-		Tfun = (Q -(R' * DHj)) ./ cp_mix;
+		Tfun = (Q * ro_bulk / phi) / cp_mix / Ntot;
+		
 		%Tfun = 0;								% For isothermal case
 
 		% Define functions to integrate
 		r = nu * R;
 		PFR = [(r * (ro_bulk / phi)); Tfun];
-
-		% Define heat of reaction
-		QR = R' * DHj;
+		QR = abs(-R' * DHj);
+		
 	end
 
 	%% =========================== MAIN SCRIPT ============================
@@ -79,7 +85,7 @@ function Non_isothermal_reactor
 	P = 5;											% Bar
 
 	% Initialize constants
-	Rg = 8.3145 * 10^-2;							% Bar m^3 / K kmol                                 
+	Rg = 8.3145 * 10^-2;							% Kj / K mol                                 
 
 	% Initialize kinetic and equilibrium parameters
 	Aj = [4.225e+15 1.955e+06 1.020e+15]';			% With j = 1,2,3 - bar^-1
@@ -179,13 +185,13 @@ function Non_isothermal_reactor
 	end
 
 	figure
-	plot(vol * 10^3, Qvec / 10, 'LineWidth', 1.5);
+	plot(vol * 10^3, Qvec, 'LineWidth', 1.5), hold on
 	title('Heat of reaction vs volume of catalyst');
 	xlabel('Volume of catalyst [l]');
-	ylabel('Heat of reaction [KJ]');
-	ylim([0 1.4e04]);
-	xlim([0 5]);
-
+	ylabel('Heat of reaction modulus [KJ]');
+	xlim([0 2]);
+	ylim([0 30000]);
+	
 	%%
 	% Boyfriend contribution
 	lotsa = -10 : 0.01 : 10;

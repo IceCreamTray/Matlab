@@ -1,3 +1,102 @@
+function comparison
+function[PFR, QR] = Adiabatic(vol, Y, nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai)
+		Ni = Y(1:5);							% kmol/h
+		Tk = Y(6);
+
+		% Define partial pressure as function of molar flowrates  
+		Ntot=sum(Ni)
+		p = P * Ni ./ Ntot						% i = CO,H2,CH4,H2O,CO2
+
+		% Define kinetic constants
+		kpj = [exp(30.481 - 27.187e+03 / Tk) exp(-3.924 + 4.291e+03 / Tk) exp(26.891 - 23.258e+03 / Tk)]';
+		kj = Aj .* (exp(-Ej ./ (Rg * Tk)));
+		ki = Ai .* (exp(-DHi ./ (Rg * Tk)));
+
+		% Calculate reaction rates
+		DEN = 1 + ki(1) * p(1) + ki(2) * p(2) + ki(3) * p(3) + ((ki(4) * p(4)) / p(2)); 
+		R1 = ((kj(1) / (p(2) ^ 2.5)) * (p(3) * p(4) - ((p(2) ^ 3 * p(1)) / kpj(1)))) / ((DEN) ^ 2);
+		R2 = ((kj(2) / p(2)) * (p(1) * p(4) - ((p(2) * p(5)) / kpj(2)))) / ((DEN) ^ 2);
+		R3 = ((kj(3) / (p(2) ^ 3.5)) * ((p(3) * (p(4) ^ 2)) - (p(2) ^ 4 * p(5) / kpj(3)))) / ((DEN) ^ 2);
+		R = [R1 R2 R3]';
+
+		% Define entalphies of reaction
+		DH1 = ((-4.47*(10^13)) * (Tk^ -4.459)) + 226.9;       
+		DH2 = -271.4 * (Tk ^ -0.2977);
+		DH3 = 99.52 * (Tk^0.0937);
+		DHj = ([DH1 DH2 DH3])'					% Kj /mol    
+
+		% Define specific heat
+		cpi = ((ai.*Tk + bi).* Rg*10^-1)';
+		cp_mix = sum(((Ni./Ntot)).*cpi);
+
+		% Adiabatic case
+		Qdot = 0;
+		
+		% Define heat of reaction
+		QR = -R' * DHj;
+		
+		% Define total heat
+		Q = Qdot + QR;
+		
+		% Energy balance 
+		Tfun = (Q * ro_bulk / phi) / cp_mix / Ntot;
+
+		% Define functions to integrate
+		r = nu * R;
+		PFR = [(r * (ro_bulk / phi)); Tfun];
+		QR = abs(-R' * DHj);
+		
+end
+
+function[PFR2, QR2] = Isothermal(volu, Y, nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai)
+		Niso = Y(1:5);							% kmol/h
+		Tkiso = Y(6);
+
+		% Define partial pressure as function of molar flowrates  
+		Ntotiso=sum(Niso)
+		p = P * Niso ./ Ntotiso						% i = CO,H2,CH4,H2O,CO2
+
+		% Define kinetic constants
+		kpj = [exp(30.481 - 27.187e+03 / Tkiso) exp(-3.924 + 4.291e+03 / Tkiso) exp(26.891 - 23.258e+03 / Tkiso)]';
+		kj = Aj .* (exp(-Ej ./ (Rg * Tkiso)));
+		ki = Ai .* (exp(-DHi ./ (Rg * Tkiso)));
+
+		% Calculate reaction rates
+		DEN = 1 + ki(1) * p(1) + ki(2) * p(2) + ki(3) * p(3) + ((ki(4) * p(4)) / p(2)); 
+		R1 = ((kj(1) / (p(2) ^ 2.5)) * (p(3) * p(4) - ((p(2) ^ 3 * p(1)) / kpj(1)))) / ((DEN) ^ 2);
+		R2 = ((kj(2) / p(2)) * (p(1) * p(4) - ((p(2) * p(5)) / kpj(2)))) / ((DEN) ^ 2);
+		R3 = ((kj(3) / (p(2) ^ 3.5)) * ((p(3) * (p(4) ^ 2)) - (p(2) ^ 4 * p(5) / kpj(3)))) / ((DEN) ^ 2);
+		R = [R1 R2 R3]';
+
+		% Define entalphies of reaction
+		DH1 = ((-4.47*(10^13)) * (Tkiso^ -4.459)) + 226.9;       
+		DH2 = -271.4 * (Tkiso ^ -0.2977);
+		DH3 = 99.52 * (Tkiso^0.0937);
+		DHj = ([DH1 DH2 DH3])'					% Kj /mol    
+
+		% Define specific heat
+		cpi = ((ai.*Tkiso + bi).* Rg*10^-1)';
+		cp_mix = sum(((Niso./Ntotiso)).*cpi);
+
+		
+		% Define heat of reaction
+		QR2 = -R' * DHj;
+		
+		% Isothermal case
+		Qdot = - QR2;
+		% Define total heat
+		Q = Qdot + QR2
+		
+		% Energy balance 
+		Tfun = (Q * ro_bulk / phi) / cp_mix / Ntotiso;
+
+		% Define functions to integrate
+		r = nu * R;
+		PFR2 = [(r * (ro_bulk / phi)); Tfun];
+		QR2 = abs(-R' * DHj);
+		
+	end
+
 %% ==================== MAIN SCRIPT ====================
 format long;
 %clc, clear all, close all
@@ -36,14 +135,16 @@ nu=[+1 -1  0
 %% Integration
 
 % Non isothermal
-[vol,Y] = ode15s(@BMiBe,[0 0.030],Y0,[],nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+[vol,Y] = ode15s(@Adiabatic,[0 0.030],Y0,[],nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
 Ni = Y(:,1:5);
 Nitot = sum(Ni');
 Tk = Y(:,6);
 
 % Isothermal
-[volu,Niso] = ode23(@BMiso,[0 0.030],Niso0,[],nu,phi,ro_bulk,P,Aj,Ai,Ej,DHi,T,Rg);
-
+[volu,Y2] = ode15s(@Isothermal,[0 0.030],Y0,[],nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+Niso = Y2(:,1:5);
+Ntotiso = sum(Niso');
+Tkiso = Y2(:,6);
 
 %% Plots
 % Red is non iso, blue is iso.
@@ -138,21 +239,19 @@ title('Residence time profile along the volume of catalyst');
 %% Heat of reaction
 
 for u=1:length(vol)
-	[PFR,QR] = BMiBe(vol(u),Y(u,1:6)',nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+	[PFR,QR] = Adiabatic(vol(u),Y(u,1:6)',nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
 	Qvec(u)=QR;
+end
+for u=1:length(volu)
+	[PFR2,QR2] = Isothermal(volu(u),Y2(u,1:6)',nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
+	Qvec2(u)=QR2;
 end
 
 
 figure
-plot(vol*10^3,Qvec/10,'-r','LineWidth',1.5), hold on
-
-[vol,Y] = ode15s(@BMiBe2,[0 0.008],Y0,[],nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
-
-for u=1:length(vol)
-	[PFR,QR2] = BMiBe2(vol(u),Y(u,1:6),nu,phi,ro_bulk,P,Rg,ai,bi,DHi,Ej,Aj,Ai);
-	Qvec2(u)=QR2;
-end
-plot(vol*10^3,Qvec2/10','Blue','LineWidth', 1.5), hold on
+plot(vol*10^3,Qvec,'-r','LineWidth',1.5), hold on
+plot(volu*10^3,Qvec2,'Blue','LineWidth', 1.5), hold on
 xlabel('Volume of catalyst[L]');
 ylabel('Heat of reaction [KJ]');
 title('Heat of reaction vs volume of catalyst');
+end
