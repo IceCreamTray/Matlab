@@ -81,7 +81,7 @@ function Isothermal_reactor
 
 
 	%% Integration
-	[vol, Ni] = ode23(@BMi, [0 0.008], Ni0, [], ki, kj, kpj, nu, phi, ro_bulk, P);
+	[vol, Ni] = ode23(@BMi, [0 0.05], Ni0, [], ki, kj, kpj, nu, phi, ro_bulk, P);
 
 
 	%% Plots
@@ -174,7 +174,7 @@ function Isothermal_reactor
 	title('Outlet and inlet gas velocity ratio along the volume of catalyst');
 	ylabel('Outlet gas velocity and inlet gas velocity ratio');
 	xlabel('Volume of catalyst [l]');
-	ylim([1 1.35]);
+	%ylim([1 1.35]);
 
 
 	%%
