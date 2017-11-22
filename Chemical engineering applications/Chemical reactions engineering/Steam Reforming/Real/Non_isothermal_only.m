@@ -112,7 +112,7 @@ function Non_isothermal_reactor
 
 
 	%% Integration
-	[vol, Y] = ode15s(@BMiBe, [0 0.012], Y0, [], nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
+	[vol, Y] = ode15s(@BMiBe, [0 0.030], Y0, [], nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
 	Ni = Y(:,1:5);
 	Nitot = sum(Ni');
 	Tk = Y(:,6);
@@ -127,7 +127,7 @@ function Non_isothermal_reactor
 	figure
 	plot(vol * 10^3, Nprof, 'LineWidth', 1.5), hold on
 	title('Flow rate profiles along the volume of catalyst');
-	legend('CO', 'H2','H2O', 'CH4', 'CO2');
+	legend('CO', 'H2','CH4', 'H2O', 'CO2');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Molar flow rate of species [kmol/h]');
 
@@ -151,7 +151,7 @@ function Non_isothermal_reactor
 	xlabel('Volume of catalyst [l]');
 	ylabel('Molar fractions of species');
 	title('Molar fractions profiles along the volume of catalyst');
-	legend('CO', 'H2','H2O', 'CH4', 'CO2');
+	legend('CO', 'H2','CH4', 'H2O', 'CO2');
 
 
 	%%
@@ -206,6 +206,7 @@ function Non_isothermal_reactor
 	plot(Ti - 273.15, DH2, 'LineWidth', 1.5), hold on
 	plot(Ti - 273.15, DH3, 'LineWidth', 1.5), hold on;
 	title('Dependancy of enthalpy upon temperature');
+	legend('DH1', 'DH2', 'DH3');
 	xlabel('Temperature (°C)');
 	ylabel('Enthalpy [KJ/mol]');
 	xlim([0 4000]);

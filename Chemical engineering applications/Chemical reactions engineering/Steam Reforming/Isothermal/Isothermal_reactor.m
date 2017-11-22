@@ -92,7 +92,7 @@ function Isothermal_reactor
 	figure
 	plot(vol * 10^3, Nprof, 'LineWidth', 1.5), hold on
 	title('Flow rates profiles along the volume of catalyst');
-	legend('CO', 'H2','H2O', 'CH4', 'CO2');
+	legend('CO', 'H2','CH4', 'H2O', 'CO2');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Molar flow rate of species [kmol/h]');
 

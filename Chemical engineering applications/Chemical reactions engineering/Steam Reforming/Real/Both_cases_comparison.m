@@ -5,8 +5,8 @@
 % Plots molar flow rates profile along the reactor, conversions, yields,
 % selectivities, heat of reaction, residence time.
 % Provides graphical indications of methane conversion.
-% Compares an adiabatic reactor with an isotermal one and one at constant
-% heat supply.
+% Compares an adiabatic reactor (red) with an isotermal one (blue) and one 
+% at constant heat supply (green).
 % The listed reactions are a simplified version of methane steam reforming:
 % 1) CH4 + H2O <=> CO + 3H2 (methane steam reforming)
 % 2) CO + H2O <=> CO2 + H2 (water-gas shift)
