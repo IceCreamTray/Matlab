@@ -27,7 +27,7 @@ function Non_isothermal_reactor
 
 		% Define partial pressure as function of molar flowrates  
 		Ntot=sum(Ni)
-		p = P * Ni ./ Ntot						% i = CO,H2,CH4,H2O,CO2
+		p = P * Ni ./ Ntot						% i = CO, H2, CH4, H2O, CO2
 
 		% Define kinetic constants
 		kpj = [exp(30.481 - 27.187e+03 / Tk) exp(-3.924 + 4.291e+03 / Tk) exp(26.891 - 23.258e+03 / Tk)]';
@@ -44,12 +44,12 @@ function Non_isothermal_reactor
 		% Define entalphies of reaction
 		DH1 = ((-4.47*(10^13)) * (Tk^ -4.459)) + 226.9;       
 		DH2 = -271.4 * (Tk ^ -0.2977);
-		DH3 = 99.52 * (Tk^0.0937);
+		DH3 = 99.52 * (Tk ^ 0.0937);
 		DHj = ([DH1 DH2 DH3])'					% Kj /mol    
 
 		% Define specific heat
-		cpi = ((ai.*Tk + bi).* Rg*10^-1)';
-		cp_mix = sum(((Ni./Ntot)).*cpi);
+		cpi = ((ai .* Tk + bi) .* Rg * 10^-1)';
+		cp_mix = sum(((Ni ./ Ntot)) .* cpi);
 
 		% Add heat duty if wanted
 		Qdot = 300 * 36/19;
@@ -113,21 +113,21 @@ function Non_isothermal_reactor
 
 	%% Integration
 	[vol, Y] = ode15s(@BMiBe, [0 0.030], Y0, [], nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
-	Ni = Y(:,1:5);
+	Ni = Y(:, 1:5);
 	Nitot = sum(Ni');
-	Tk = Y(:,6);
+	Tk = Y(:, 6);
 
 
 	%% Plots
 
 	%%
 	% Define profile along the volume of catalyst
-	Nprof = [Ni(:,1) Ni(:,2) Ni(:,3) Ni(:,4) Ni(:,5)];
+	Nprof = [Ni(:, 1) Ni(:, 2) Ni(:, 3) Ni(:, 4) Ni(:, 5)];
 
 	figure
 	plot(vol * 10^3, Nprof, 'LineWidth', 1.5), hold on
 	title('Flow rate profiles along the volume of catalyst');
-	legend('CO', 'H2','CH4', 'H2O', 'CO2');
+	legend('CO', 'H2', 'CH4', 'H2O', 'CO2');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Molar flow rate of species [kmol/h]');
 
@@ -166,7 +166,7 @@ function Non_isothermal_reactor
 
 	%%
 	% Define conversion plot
-	conv_CH4 = (Ni0(3) - Ni(:,3)) ./ (Ni0(3));
+	conv_CH4 = (Ni0(3) - Ni(:, 3)) ./ (Ni0(3));
 
 	figure
 	plot(vol * 10^3, conv_CH4, 'Linewidth', 1.5);
@@ -180,7 +180,7 @@ function Non_isothermal_reactor
 	%% 
 	% Heat of reaction
 	for u = 1:length(vol)
-		[PFR, QR] = BMiBe(vol(u), Y(u,:)', nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
+		[PFR, QR] = BMiBe(vol(u), Y(u, :)', nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
 		Qvec(u) = QR;
 	end
 
@@ -210,15 +210,5 @@ function Non_isothermal_reactor
 	xlabel('Temperature (°C)');
 	ylabel('Enthalpy [KJ/mol]');
 	xlim([500 800]);
-	
-	%%
-	% Boyfriend contribution
-	lotsa = -10 : 0.01 : 10;
-	lo = 16 * (power(sin(lotsa), 3));
-	ve = (13 * cos(lotsa)) - (5 * cos(2 * lotsa)) - (2 * cos(3 * lotsa)) - (cos(4 * lotsa));
-	
-	figure
-	plot(lo,ve);
-	title('929');
 	
 end
