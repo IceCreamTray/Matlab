@@ -88,13 +88,13 @@ function Isothermal_reactor
 
 	%% Plots
 
-	% Define specie's flow rate profile along the volume of catalyst
+	% Define species flow rate profile along the volume of catalyst
 	Nprof = [Ni(:, 1) Ni(:, 2) Ni(:, 3) Ni(:, 4) Ni(:, 5)];
 
 	figure
 	plot(vol * 10^3, Nprof, 'LineWidth', 1.5), hold on
 	title('Flow rates profiles along the volume of catalyst');
-	legend('CO', 'H2','CH4', 'H2O', 'CO2');
+	legend('CO', 'H2', 'CH4', 'H2O', 'CO2');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Molar flow rate of species [kmol/h]');
 
