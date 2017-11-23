@@ -23,7 +23,7 @@ function Isothermal_reactor
 	function [PFR] = BMi(vol, Ni, ki,kj, kpj, nu, phi, ro_bulk, P)
 		% Define partial pressure as function of molar flow rates  
 		Ntot = sum(Ni);
-		p = P * Ni ./ Ntot;			% i = CO,H2,CH4,H2O,CO2
+		p = P * Ni ./ Ntot;			% i = CO, H2, CH4, H2O, CO2
 
 		% Calculate reaction rates
 		DEN = 1 + ki(1) * p(1) + ki(2) * p(2) + ki(3) * p(3) + ((ki(4) * p(4)) / p(2)); 
@@ -87,7 +87,7 @@ function Isothermal_reactor
 	%% Plots
 
 	% Define specie's flow rate profile along the volume of catalyst
-	Nprof = [Ni(:,1) Ni(:,2) Ni(:,3) Ni(:,4) Ni(:,5)];
+	Nprof = [Ni(:, 1) Ni(:, 2) Ni(:, 3) Ni(:, 4) Ni(:, 5)];
 
 	figure
 	plot(vol * 10^3, Nprof, 'LineWidth', 1.5), hold on
@@ -99,7 +99,7 @@ function Isothermal_reactor
 
 	%%
 	% Define dry products plot
-	Ndry = [Ni(:,1), Ni(:,2), Ni(:,3), Ni(:,5)]';
+	Ndry = [Ni(:, 1), Ni(:, 2), Ni(:, 3), Ni(:, 5)]';
 	Ndry_tot = sum(Ndry);
 	xdry = bsxfun(@rdivide, Ndry, Ndry_tot);
 
@@ -113,13 +113,13 @@ function Isothermal_reactor
 
 	%%
 	% Define conversion plot
-	conv_CH4 = (Ni0(3) - Ni(:,3)) ./ (Ni0(3));
+	conv_CH4 = (Ni0(3) - Ni(:, 3)) ./ (Ni0(3));
 
 	figure
 	plot(vol * 10^3, conv_CH4, 'LineWidth', 1.5), hold on, grid on
 	l = refline(0, 0.5);
-	n = line([4.18 4.18], [0 1]);
-	set(n, 'LineStyle', '--', 'Color', 'black');
+	set(l, 'LineStyle', '--', 'Color', 'black');
+	l = line([4.18 4.18], [0 1]);
 	set(l, 'LineStyle', '--', 'Color', 'black');
 	title('Conversion of Methane along the volume of catalyst');
 	xlabel('Volume of catalyst [l]');
@@ -129,8 +129,8 @@ function Isothermal_reactor
 
 	%%
 	% Define yields plots
-	yi_h2_ch4 = ((Ni(:,2) - Ni0(2)) ./ (Ni0(3))) .* (1/4);	% Defined on the last reaction
-	yi_co_ch4 = (Ni(:,1) ./ Ni0(3));
+	yi_h2_ch4 = ((Ni(:, 2) - Ni0(2)) ./ (Ni0(3))) .* (1/4);	% Defined on the last reaction
+	yi_co_ch4 = (Ni(:, 1) ./ Ni0(3));
 
 	figure
 	plot(vol * 10^3, yi_co_ch4, 'LineWidth', 1.5), hold on, grid on
@@ -138,15 +138,15 @@ function Isothermal_reactor
 	l = line([4.18 4.18], [0 1]);
 	set(l, 'LineStyle', '--', 'Color', 'black');
 	title('Yield of H2 and CO on CH4 along the volume of catalyst');
-	legend('CO','H2');
+	legend('CO', 'H2');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Yield of H2 and CO on CH4');
 
 
 	%%
 	%Define selectivities plot
-	sh2 = (Ni(:,2) - Ni0(2)) ./ (Ni0(3) - Ni(:,3)) * 1/4;	% Defined on the last reaction
-	sco = (Ni(:,1) - Ni0(1)) ./ (Ni0(3) - Ni(:,3));
+	sh2 = (Ni(:, 2) - Ni0(2)) ./ (Ni0(3) - Ni(:, 3)) * 1/4;	% Defined on the last reaction
+	sco = (Ni(:, 1) - Ni0(1)) ./ (Ni0(3) - Ni(:, 3));
 
 	figure
 	plot(vol * 10^3, sh2, '-r', 'LineWidth', 1.5), hold on, grid on
@@ -154,7 +154,7 @@ function Isothermal_reactor
 	l = line([4.18 4.18], [0 1]);
 	set(l, 'LineStyle', '--', 'Color', 'black');
 	title('Selectivities of H2,CO on CH4 along the volume of catalyst');
-	legend('H2','CO');
+	legend('H2', 'CO');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Selectivity of H2,CO on CH4');
 
@@ -162,7 +162,7 @@ function Isothermal_reactor
 	%%
 	% Ratio between inlet and outlet gas velocity
 	vo = (Ni .* (Rg * T)) ./ P;
-	volflow_out_tot = vo(:,1) + vo(:,2) + vo(:,3) + vo(:,4) + vo(:,5);
+	volflow_out_tot = vo(:, 1) + vo(:, 2) + vo(:, 3) + vo(:, 4) + vo(:, 5);
 	vi = (Ni0 .* (Rg * T)) ./ P;
 	volflow_in_tot = vi(1) + vi(2) + vi(3) + vi(4) + vi(5);
 	ratio = (volflow_out_tot / volflow_in_tot);
@@ -180,12 +180,12 @@ function Isothermal_reactor
 	%%
 	% Residence time plot
 	volu = (Ni .* (Rg * T)) ./ P;
-	volflow_tot = volu(:,1) + volu(:,2) + volu(:,3) + volu(:,4) + volu(:,5);
+	volflow_tot = volu(:,1) + volu(:, 2) + volu(:, 3) + volu(:, 4) + volu(:, 5);
 	h = cumtrapz(vol, 1 ./ (volflow_tot));
 
 	figure
 	plot(vol * 10^3, h * 3600 * 10^3, 'LineWidth', 1.5), grid on
-	l = line([4.18 4.18],[0 4]);
+	l = line([4.18 4.18], [0 4]);
 	set(l, 'LineStyle', '--', 'Color', 'black');
 	title('Residence time profile along the volume of catalyst');
 	xlabel('Volume of catalyst [l]');
@@ -200,6 +200,5 @@ function Isothermal_reactor
 	format short
 	disp('Residence time value at output [ms]: ');
 	disp(tau * 3600 * 10^3);
-
 
 end
