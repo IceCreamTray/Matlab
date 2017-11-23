@@ -18,7 +18,7 @@
 function Comparison
 	%% ========================= ADIABATIC CASE ===========================
 	
-	function[PFR, QR] = Adiabatic(vol, Y, nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai)
+	function[PFR, QR, Rd, Ri] = Adiabatic(vol, Y, nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai)
 		Ni = Y(1:5);							% Kmol/h
 		Tk = Y(6);
 
@@ -36,6 +36,14 @@ function Comparison
 		R1 = ((kj(1) / (p(2) ^ 2.5)) * (p(3) * p(4) - ((p(2) ^ 3 * p(1)) / kpj(1)))) / ((DEN) ^ 2);
 		R2 = ((kj(2) / p(2)) * (p(1) * p(4) - ((p(2) * p(5)) / kpj(2)))) / ((DEN) ^ 2);
 		R3 = ((kj(3) / (p(2) ^ 3.5)) * ((p(3) * (p(4) ^ 2)) - (p(2) ^ 4 * p(5) / kpj(3)))) / ((DEN) ^ 2);
+        
+        Rd1 = ((kj(1) / (p(2) ^ 2.5)) * p(3) * p(4)) / (DEN ^ 2);
+        Ri1 = ((kj(1) / (p(2) ^ 2.5)) * p(2) ^3 * p(1) / kpj(1)) / (DEN ^ 2);
+        Rd2 = ((kj(2) / p(2)) * p(1) * p(4)) / (DEN ^ 2);
+        Ri2 = ((kj(2) / p(2)) * p(2) * p(5) / kpj(2)) / (DEN ^ 2);
+        Rd3 = ((kj(3) / p(2) ^ 3.5) * p(3) * p(4) ^ 2) / (DEN ^ 2);
+        Ri3 = ((kj(3) / p(2) ^ 3.5) * p(2) ^4 * p(5) / kpj(3)) / (DEN ^ 2);
+        
 		R = [R1 R2 R3]';
 
 		% Define entalphies of reaction
@@ -66,12 +74,15 @@ function Comparison
 		
 		% Define heat of reaction
 		QR = abs(-R' * DHj);
+        
+        Rd = [Rd1 Rd2 Rd3]';
+        Ri = [Ri1 Ri2 Ri3]';
 
 	end
 
 	%% ========================= ISOTHERMAL CASE ==========================
 
-	function[PFR2, QR2] = Isothermal(volu, Y, nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai)
+	function[PFR2, QR2, Rdk2, Rik2] = Isothermal(volu, Y, nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai)
 		Niso = Y(1:5);							% Kmol/h
 		Tkiso = Y(6);
 
@@ -89,6 +100,14 @@ function Comparison
 		R1 = ((kj(1) / (p(2) ^ 2.5)) * (p(3) * p(4) - ((p(2) ^ 3 * p(1)) / kpj(1)))) / ((DEN) ^ 2);
 		R2 = ((kj(2) / p(2)) * (p(1) * p(4) - ((p(2) * p(5)) / kpj(2)))) / ((DEN) ^ 2);
 		R3 = ((kj(3) / (p(2) ^ 3.5)) * ((p(3) * (p(4) ^ 2)) - (p(2) ^ 4 * p(5) / kpj(3)))) / ((DEN) ^ 2);
+        
+        Rd12 = ((kj(1) / (p(2) ^ 2.5)) * p(3) * p(4)) / (DEN ^ 2);
+        Ri12 = ((kj(1) / (p(2) ^ 2.5)) * p(2) ^3 * p(1) / kpj(1)) / (DEN ^ 2);
+        Rd22 = ((kj(2) / p(2)) * p(1) * p(4)) / (DEN ^ 2);
+        Ri22 = ((kj(2) / p(2)) * p(2) * p(5) / kpj(2)) / (DEN ^ 2);
+        Rd32 = ((kj(3) / p(2) ^ 3.5) * p(3) * p(4) ^ 2) / (DEN ^ 2);
+        Ri32 = ((kj(3) / p(2) ^ 3.5) * p(2) ^4 * p(5) / kpj(3)) / (DEN ^ 2);
+        
 		R = [R1 R2 R3]';
 
 		% Define entalphies of reaction
@@ -120,12 +139,15 @@ function Comparison
 		
 		% Define heat of reaction
 		QR2 = abs(-R' * DHj);
+        
+        Rdk2 = [Rd12 Rd22 Rd32]';
+        Rik2 = [Ri12 Ri22 Ri32]';
 
 	end
 
 	%% ========================= HEAT FLOW CONST ==========================
 	
-	function [PFR3, QR3] = HeatFlux(vola, Y, nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai)
+	function [PFR3, QR3, Rda, Ria] = HeatFlux(vola, Y, nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai)
 		Nif = Y(1:5);								% Kmol/h
 		Tkf = Y(6);
 
@@ -143,6 +165,14 @@ function Comparison
 		R1 = ((kj(1) / (p(2) ^ 2.5)) * (p(3) * p(4) - ((p(2) ^ 3 * p(1)) / kpj(1)))) / ((DEN) ^ 2);
 		R2 = ((kj(2) / p(2)) * (p(1) * p(4) - ((p(2) * p(5)) / kpj(2)))) / ((DEN) ^ 2);
 		R3 = ((kj(3) / (p(2) ^ 3.5)) * ((p(3) * (p(4) ^ 2)) - (p(2) ^ 4 * p(5) / kpj(3)))) / ((DEN) ^ 2);
+        
+        Rd12 = ((kj(1) / (p(2) ^ 2.5)) * p(3) * p(4)) / (DEN ^ 2);
+        Ri12 = ((kj(1) / (p(2) ^ 2.5)) * p(2) ^3 * p(1) / kpj(1)) / (DEN ^ 2);
+        Rd22 = ((kj(2) / p(2)) * p(1) * p(4)) / (DEN ^ 2);
+        Ri22 = ((kj(2) / p(2)) * p(2) * p(5) / kpj(2)) / (DEN ^ 2);
+        Rd32 = ((kj(3) / p(2) ^ 3.5) * p(3) * p(4) ^ 2) / (DEN ^ 2);
+        Ri32 = ((kj(3) / p(2) ^ 3.5) * p(2) ^4 * p(5) / kpj(3)) / (DEN ^ 2);
+        
 		R = [R1 R2 R3]';
 
 		% Define entalphies of reaction
@@ -174,6 +204,9 @@ function Comparison
 		
 		% Define heat of reaction
 		QR3 = abs(-R' * DHj);
+        
+        Rda = [Rd12 Rd22 Rd32]';
+        Ria = [Ri12 Ri22 Ri32]';
 
 	end
 
@@ -374,5 +407,133 @@ function Comparison
 	ylabel('Heat of reaction [KJ]');
 	xlim([0 2]);
 	ylim([0 15000]);
+    
+    %%
+    % Reaction rates
+    for u = 1:length(vol)
+		[PFR, QR, Rd, Ri] = Adiabatic(vol(u), Y(u, 1:6)', nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
+        Rdir(:,u) = Rd;
+        Rinv(:,u) = Ri;
+    end
+    Rdir1 = Rdir(1,1:101);
+    Rdir2 = Rdir(2,1:101);
+    Rdir3 = Rdir(3,1:101);
+    Rinv1 = Rinv(1,1:101);
+    Rinv2 = Rinv(2,1:101);
+    Rinv3 = Rinv(3,1:101);
+    
+    figure
+    plot(vol * 10^3, Rdir1, 'LineWidth', 1.5), hold on, grid on 
+    plot(vol * 10^3, Rinv1, 'LineWidth', 1.5);
+    title('Reaction rate of methane steam reforming [Adiabatic]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
+    
+    figure
+    plot(vol * 10^3, Rdir2, 'LineWidth', 1.5), hold on, grid on 
+    plot(vol * 10^3, Rinv2, 'LineWidth', 1.5);
+    title('Reaction rate of water - gas shift [Adiabatic]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
+    
+    figure
+    plot(vol * 10^3, Rdir3, 'LineWidth', 1.5), hold on, grid on 
+    plot(vol * 10^3, Rinv3, 'LineWidth', 1.5);
+    title('Reaction rate of methanation [Adiabatic]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
+    
+    for u = 1:length(volu)
+		[PFR, QR, Rdk2, Rik2] = Isothermal(volu(u), Y2(u, 1:6)', nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
+         Rdirk2(:,u) = Rdk2;
+         Rinvk2(:,u) = Rik2;
+    end
+    Rdir21 = Rdirk2(1,1:94);
+    Rdir22 = Rdirk2(2,1:94);
+    Rdir23 = Rdirk2(3,1:94);
+    Rinv21 = Rinvk2(1,1:94);
+    Rinv22 = Rinvk2(2,1:94);
+    Rinv23 = Rinvk2(3,1:94);
+    
+    figure
+    plot(volu * 10^3, Rdir21, 'LineWidth', 1.5), hold on, grid on 
+    plot(volu * 10^3, Rinv21, 'LineWidth', 1.5);
+    title('Reaction rate of methane steam reforming [Isothermal]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
+    
+    figure
+    plot(volu * 10^3, Rdir22, 'LineWidth', 1.5), hold on, grid on 
+    plot(volu * 10^3, Rinv22, 'LineWidth', 1.5);
+    title('Reaction rate of water - gas shift [Isothermal]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
+    
+    figure
+    plot(volu * 10^3, Rdir23, 'LineWidth', 1.5), hold on, grid on 
+    plot(volu * 10^3, Rinv23, 'LineWidth', 1.5);
+    title('Reaction rate of methanation [Isothermal]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
+    
+     for u = 1:length(vola)
+		[PFR, QR, Rda, Ria] = HeatFlux(vola(u), Y3(u, 1:6)', nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
+         Rdira(:,u) = Rda;
+         Rinva(:,u) = Ria;
+    end
+    Rdira1 = Rdira(1,1:106);
+    Rdira2 = Rdira(2,1:106);
+    Rdira3 = Rdira(3,1:106);
+    Rinva1 = Rinva(1,1:106);
+    Rinva2 = Rinva(2,1:106);
+    Rinva3 = Rinva(3,1:106);
+    
+    figure
+    plot(vola * 10^3, Rdira1, 'LineWidth', 1.5), hold on, grid on 
+    plot(vola * 10^3, Rinva1, 'LineWidth', 1.5);
+    title('Reaction rate of methane steam reforming [Constant heat flow]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
+    
+    figure
+    plot(vola * 10^3, Rdira2, 'LineWidth', 1.5), hold on, grid on 
+    plot(vola * 10^3, Rinva2, 'LineWidth', 1.5);
+    title('Reaction rate of water - gas shift [Constant heat flow]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
+    
+    figure
+    plot(vola * 10^3, Rdira3, 'LineWidth', 1.5), hold on, grid on 
+    plot(vola * 10^3, Rinva3, 'LineWidth', 1.5);
+    title('Reaction rate of methanation [Constant heat flow]');
+    xlabel('Volume of catalyst [l]');
+    ylabel('Reaction rate [ ]');
+    legend('Direct reaction','Inverse reaction');
+    ylim([0 10]);
+    xlim([0 6]);
 
 end
