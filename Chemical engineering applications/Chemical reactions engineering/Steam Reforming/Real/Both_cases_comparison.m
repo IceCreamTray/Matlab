@@ -3,7 +3,7 @@
 % Calculates mass and energy balances for a packed bed real reactor.
 % The molar flow rates are integrated upon the volume of catalyst.
 % Plots molar flow rates profile along the reactor, conversions, yields,
-% selectivities, heat of reaction, residence time.
+% selectivities, heat of reaction, residence time, reaction rates.
 % Provides graphical indications of methane conversion.
 % Compares an adiabatic reactor (red) with an isotermal one (blue) and one 
 % at constant heat supply (green).
@@ -430,7 +430,7 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
     
     figure
     plot(vol * 10^3, Rdir2, 'LineWidth', 1.5), hold on, grid on 
@@ -440,7 +440,7 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
     
     figure
     plot(vol * 10^3, Rdir3, 'LineWidth', 1.5), hold on, grid on 
@@ -450,7 +450,7 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
     
     for u = 1:length(volu)
 		[PFR, QR, Rdk2, Rik2] = Isothermal(volu(u), Y2(u, 1:6)', nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
@@ -472,7 +472,7 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
     
     figure
     plot(volu * 10^3, Rdir22, 'LineWidth', 1.5), hold on, grid on 
@@ -482,7 +482,7 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
     
     figure
     plot(volu * 10^3, Rdir23, 'LineWidth', 1.5), hold on, grid on 
@@ -492,7 +492,7 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
     
      for u = 1:length(vola)
 		[PFR, QR, Rda, Ria] = HeatFlux(vola(u), Y3(u, 1:6)', nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
@@ -514,7 +514,7 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
     
     figure
     plot(vola * 10^3, Rdira2, 'LineWidth', 1.5), hold on, grid on 
@@ -524,7 +524,7 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
     
     figure
     plot(vola * 10^3, Rdira3, 'LineWidth', 1.5), hold on, grid on 
@@ -534,6 +534,6 @@ function Comparison
     ylabel('Reaction rate [ ]');
     legend('Direct reaction','Inverse reaction');
     ylim([0 10]);
-    xlim([0 6]);
+    xlim([0 20]);
 
 end

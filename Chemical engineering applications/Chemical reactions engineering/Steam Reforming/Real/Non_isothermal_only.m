@@ -209,7 +209,7 @@ function Non_isothermal_reactor
 	legend('DH1', 'DH2', 'DH3');
 	xlabel('Temperature (°C)');
 	ylabel('Enthalpy [KJ/mol]');
-	xlim([0 4000]);
+	xlim([500 800]);
 	
 	%%
 	% Boyfriend contribution
