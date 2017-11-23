@@ -19,7 +19,9 @@
 % =========================================================================
 
 function Isothermal_reactor
+
 	%% ======================== MATERIAL BALANCE ==========================
+
 	function [PFR] = BMi(vol, Ni, ki,kj, kpj, nu, phi, ro_bulk, P)
 		% Define partial pressure as function of molar flow rates  
 		Ntot = sum(Ni);
