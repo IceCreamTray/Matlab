@@ -83,7 +83,7 @@ function Isothermal_reactor
 
 
 	%% Integration
-	[vol, Ni] = ode23(@BMi, [0 0.05], Ni0, [], ki, kj, kpj, nu, phi, ro_bulk, P);
+	[vol, Ni] = ode23(@BMi, [0 0.02], Ni0, [], ki, kj, kpj, nu, phi, ro_bulk, P);
 
 
 	%% Plots
@@ -92,7 +92,7 @@ function Isothermal_reactor
 	Nprof = [Ni(:, 1) Ni(:, 2) Ni(:, 3) Ni(:, 4) Ni(:, 5)];
 
 	figure
-	plot(vol * 10^3, Nprof, 'LineWidth', 1.5), hold on
+	plot(vol * 10^3, Nprof, '-o', 'LineWidth', 1.5), hold on
 	title('Flow rates profiles along the volume of catalyst');
 	legend('CO', 'H2', 'CH4', 'H2O', 'CO2');
 	xlabel('Volume of catalyst [l]');
@@ -106,7 +106,7 @@ function Isothermal_reactor
 	xdry = bsxfun(@rdivide, Ndry, Ndry_tot);
 
 	figure
-	plot(vol * 10^3, xdry, 'LineWidth', 1.5), hold on
+	plot(vol * 10^3, xdry, '-o', 'LineWidth', 1.5), hold on
 	title('Dry products fraction along the volume of catalyst');
 	legend('CO', 'H2', 'CH4', 'CO2');
 	xlabel('Volume of catalyst [l]');
@@ -186,7 +186,7 @@ function Isothermal_reactor
 	h = cumtrapz(vol, 1 ./ (volflow_tot));
 
 	figure
-	plot(vol * 10^3, h * 3600 * 10^3, 'LineWidth', 1.5), grid on
+	plot(vol * 10^3, h * 3600 * 10^3, '-o', 'LineWidth', 1.5), grid on
 	l = line([4.18 4.18], [0 4]);
 	set(l, 'LineStyle', '--', 'Color', 'black');
 	title('Residence time profile along the volume of catalyst');

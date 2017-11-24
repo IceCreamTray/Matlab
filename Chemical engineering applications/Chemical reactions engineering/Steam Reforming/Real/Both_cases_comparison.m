@@ -427,9 +427,9 @@ function Comparison
     plot(vol * 10^3, Rinv1, 'LineWidth', 1.5);
     title('Reaction rate of methane steam reforming [Adiabatic]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_cat h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 50]);
     xlim([0 20]);
     
     figure
@@ -437,9 +437,9 @@ function Comparison
     plot(vol * 10^3, Rinv2, 'LineWidth', 1.5);
     title('Reaction rate of water - gas shift [Adiabatic]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_cat h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 50]);
     xlim([0 20]);
     
     figure
@@ -447,9 +447,9 @@ function Comparison
     plot(vol * 10^3, Rinv3, 'LineWidth', 1.5);
     title('Reaction rate of methanation [Adiabatic]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_cat h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 50]);
     xlim([0 20]);
     
     for u = 1:length(volu)
@@ -465,33 +465,33 @@ function Comparison
     Rinv23 = Rinvk2(3,1:94);
     
     figure
-    plot(volu * 10^3, Rdir21, 'LineWidth', 1.5), hold on, grid on 
-    plot(volu * 10^3, Rinv21, 'LineWidth', 1.5);
+    plot(volu * 10^3, Rdir21, 'LineWidth', 2), hold on, grid on 
+    plot(volu * 10^3, Rinv21, 'LineWidth', 2);
     title('Reaction rate of methane steam reforming [Isothermal]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_c h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 50]);
     xlim([0 20]);
     
     figure
-    plot(volu * 10^3, Rdir22, 'LineWidth', 1.5), hold on, grid on 
-    plot(volu * 10^3, Rinv22, 'LineWidth', 1.5);
+    plot(volu * 10^3, Rdir22, 'LineWidth', 2), hold on, grid on 
+    plot(volu * 10^3, Rinv22, 'LineWidth', 2);
     title('Reaction rate of water - gas shift [Isothermal]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_c h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 50]);
     xlim([0 20]);
     
     figure
-    plot(volu * 10^3, Rdir23, 'LineWidth', 1.5), hold on, grid on 
-    plot(volu * 10^3, Rinv23, 'LineWidth', 1.5);
+    plot(volu * 10^3, Rdir23, 'LineWidth', 2), hold on, grid on 
+    plot(volu * 10^3, Rinv23, 'LineWidth', 2);
     title('Reaction rate of methanation [Isothermal]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_c h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 50]);
     xlim([0 20]);
     
      for u = 1:length(vola)
@@ -511,9 +511,9 @@ function Comparison
     plot(vola * 10^3, Rinva1, 'LineWidth', 1.5);
     title('Reaction rate of methane steam reforming [Constant heat flow]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_cat h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 30]);
     xlim([0 20]);
     
     figure
@@ -521,9 +521,9 @@ function Comparison
     plot(vola * 10^3, Rinva2, 'LineWidth', 1.5);
     title('Reaction rate of water - gas shift [Constant heat flow]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_cat h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 30]);
     xlim([0 20]);
     
     figure
@@ -531,9 +531,9 @@ function Comparison
     plot(vola * 10^3, Rinva3, 'LineWidth', 1.5);
     title('Reaction rate of methanation [Constant heat flow]');
     xlabel('Volume of catalyst [l]');
-    ylabel('Reaction rate [ ]');
+    ylabel('Reaction rate [kmol/Kg_cat h]');
     legend('Direct reaction','Inverse reaction');
-    ylim([0 10]);
+    ylim([0 30]);
     xlim([0 20]);
 
 end

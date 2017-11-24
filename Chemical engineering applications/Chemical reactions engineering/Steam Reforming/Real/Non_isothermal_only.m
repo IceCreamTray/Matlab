@@ -112,7 +112,7 @@ function Non_isothermal_reactor
 
 
 	%% Integration
-	[vol, Y] = ode15s(@BMiBe, [0 0.030], Y0, [], nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
+	[vol, Y] = ode15s(@BMiBe, [0 0.035], Y0, [], nu, phi, ro_bulk, P, Rg, ai, bi, DHi, Ej, Aj, Ai);
 	Ni = Y(:, 1:5);
 	Nitot = sum(Ni');
 	Tk = Y(:, 6);
@@ -125,7 +125,7 @@ function Non_isothermal_reactor
 	Nprof = [Ni(:, 1) Ni(:, 2) Ni(:, 3) Ni(:, 4) Ni(:, 5)];
 
 	figure
-	plot(vol * 10^3, Nprof, 'LineWidth', 1.5), hold on
+	plot(vol * 10^3, Nprof, '-o', 'LineWidth', 1.5), hold on
 	title('Flow rate profiles along the volume of catalyst');
 	legend('CO', 'H2', 'CH4', 'H2O', 'CO2');
 	xlabel('Volume of catalyst [l]');
@@ -147,7 +147,7 @@ function Non_isothermal_reactor
 	x = Ni ./ Nitot';
 
 	figure 
-	plot(vol * 10^3, x, 'Linewidth', 1.5), hold on
+	plot(vol * 10^3, x, '-o', 'Linewidth', 1.5), hold on
 	xlabel('Volume of catalyst [l]');
 	ylabel('Molar fractions of species');
 	title('Molar fractions profiles along the volume of catalyst');
