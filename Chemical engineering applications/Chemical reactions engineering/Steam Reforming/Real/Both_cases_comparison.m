@@ -268,6 +268,9 @@ function Comparison
 
 	%% Plots
 	% Red for adiabatic, blue for isothermal, green for constant heat supply.
+	blue = [0 128/256 255/256];
+	red = [255/256 64/256 0];
+	green = [128/256 224/256 128/256];
 
 	%%
 	% Profile along the volume of catalyst
@@ -276,12 +279,13 @@ function Comparison
 	%Nproff = [Nif(:,1) Nif(:,2) Nif(:,3) Nif(:,4) Nif(:,5)];
 
 	figure
-	plot(vol * 10^3, Nprof, '-r', 'LineWidth', 1.5), hold on
-	plot(volu * 10^3, Nprofiso, 'Color', 'blue', 'LineWidth', 1.5), hold on
+	plot(vol * 10^3, Nprof, '-o', 'Color', red, 'LineWidth', 1.5), hold on
+	plot(volu * 10^3, Nprofiso, '-o', 'Color',blue, 'LineWidth', 1.5), hold on
 	%plot(vola * 10^3, Nproff, '-g', 'LineWidth', 1.5), hold on
 	title('Flow rate profile along the volume of catalyst');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Molar flow rate of species [kmol/h]');
+	xlim([0 20]);
 
 	%% 
 	% Define dry molar fractions plot
@@ -292,13 +296,27 @@ function Comparison
 	%xdryf = [Nif(:,1) Nif(:,2) Nif(:,3) Nif(:,5)] ./ Ntotf';
 
 	figure 
-	plot(vol * 10^3, x, '-r', 'LineWidth', 1.5), hold on
-	plot(volu * 10^3, xdryiso, 'Color', 'blue', 'LineWidth', 1.5), hold on
+	plot(vol * 10^3, x, '-o', 'Color', red, 'LineWidth', 1.5), hold on
+	plot(volu * 10^3, xdryiso,'-o', 'Color', blue, 'LineWidth', 1.5), hold on
 	%plot(vola * 10^3, xdryf, '-g', 'LineWidth', 1.5), hold on
 	title('Molar fractions profiles along the volume of catalyst');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Molar fractions of species');
-
+	xlim([0 20]);
+	
+	%%
+	% Define temperature plot
+	
+	figure
+	plot(vol * 10^3, Tk - 273.15, 'Color', red, 'LineWidth', 1.5), hold on
+	o = refline(0, 650);
+	set(o, 'Color', blue, 'LineWidth', 1.5);
+	plot(vola * 10^3, Tkf - 273.15, 'Color', green, 'LineWidth', 1.5), hold on
+	title('Temperature profiles along the volume of catalyst');
+	xlabel('Volume of catalyst [l]');
+	ylabel('Temperature [°C]');
+	xlim([0 30])
+	
 	%%
 	% Define conversion plot
 	conv_CH4 = (Ni0(3) - Ni(:, 3)) ./ (Ni0(3));
@@ -306,55 +324,56 @@ function Comparison
 	conv_CH4_f = (Ni0(3) - Nif(:, 3)) ./ (Ni0(3));
 
 	figure
-	plot(vol * 10^3, conv_CH4, '-r', 'LineWidth', 1.5), hold on
-	plot(volu * 10^3, conviso_CH4, 'Color', 'blue', 'LineWidth', 1.5), hold on
-	plot(vola * 10^3, conv_CH4_f, '-g', 'LineWidth', 1.5), hold on
+	plot(vol * 10^3, conv_CH4, 'Color', red, 'LineWidth', 1.5), hold on
+	plot(volu * 10^3, conviso_CH4, 'Color', blue, 'LineWidth', 1.5), hold on
+	plot(vola * 10^3, conv_CH4_f, 'Color', green, 'LineWidth', 1.5), hold on
 	l = refline(0, 0.5);
 	set(l, 'LineStyle', '--', 'Color', 'black');
 	title('Conversion of methane along reactor volume');
 	xlabel('Volume of catalyst[L]');
 	ylabel('Conversion of Methane');
+	xlim([0 30]);
 
 	%% 
 	% Define yields plots
-	yi_h2_ch4_iso = ((Niso(:, 2) - Niso0(2)) ./ Niso0(3)) .* (1/4);
-	yi_h2_ch4 = ((Ni(:, 2) - Ni0(2)) ./ Ni0(3)) .* (1/4);
-	yi_co_ch4_iso = (Niso(:, 1) ./ Niso0(3));
-	yi_co_ch4 = (Ni(:, 1) ./ Ni0(3));
-	yi_h2_ch4_f = ((Nif(:, 2) - Ni0(2)) ./ Ni0(3)) .* (1/4);
-	yi_co_ch4_f = (Nif(:, 1) ./ Ni0(3));
-
-	figure
-	plot (volu * 10^3, yi_co_ch4_iso, 'Color', 'blue', 'LineWidth', 1.5), hold on, grid on
-	plot(volu * 10^3, yi_h2_ch4_iso, 'Color', 'blue', 'LineWidth', 1.5)
-	plot(vola * 10^3, yi_h2_ch4_f, '-g', 'LineWidth', 1.5)
-	plot(vola * 10^3, yi_co_ch4_f, '-g', 'LineWidth', 1.5), hold on
-	plot (vol * 10^3, yi_co_ch4, '-r', 'LineWidth', 1.5), hold on, grid on
-	plot(vol * 10^3, yi_h2_ch4, '-r', 'LineWidth', 1.5), hold on
-	xlabel('Volume of catalyst [l]');
-	ylabel('Yield of H2 and CO on CH4');
-	title('Yield of H2 and CO on CH4 along the volume of catalyst');
+% 	yi_h2_ch4_iso = ((Niso(:, 2) - Niso0(2)) ./ Niso0(3)) .* (1/4);
+% 	yi_h2_ch4 = ((Ni(:, 2) - Ni0(2)) ./ Ni0(3)) .* (1/4);
+% 	yi_co_ch4_iso = (Niso(:, 1) ./ Niso0(3));
+% 	yi_co_ch4 = (Ni(:, 1) ./ Ni0(3));
+% 	yi_h2_ch4_f = ((Nif(:, 2) - Ni0(2)) ./ Ni0(3)) .* (1/4);
+% 	yi_co_ch4_f = (Nif(:, 1) ./ Ni0(3));
+% 
+% 	figure
+% 	plot (volu * 10^3, yi_co_ch4_iso, 'Color', blue, 'LineWidth', 1.5), hold on, grid on
+% 	plot(volu * 10^3, yi_h2_ch4_iso, 'Color', blue, 'LineWidth', 1.5)
+% 	plot(vola * 10^3, yi_h2_ch4_f, 'Color', green, 'LineWidth', 1.5)
+% 	plot(vola * 10^3, yi_co_ch4_f, 'Color', green, 'LineWidth', 1.5), hold on
+% 	plot (vol * 10^3, yi_co_ch4, 'Color', red, 'LineWidth', 1.5), hold on, grid on
+% 	plot(vol * 10^3, yi_h2_ch4, 'Color', red, 'LineWidth', 1.5), hold on
+% 	xlabel('Volume of catalyst [l]');
+% 	ylabel('Yield of H2 and CO on CH4');
+% 	title('Yield of H2 and CO on CH4 along the volume of catalyst');
 
 
 	%%
 	% Define selectivities plot
-	sh2 = (Ni(:, 2) - Ni0(2)) ./ (Ni0(3) - Ni(:, 3)) * 1/4;
-	sco = (Ni(:, 1) - Ni0(1)) ./ (Ni0(3) - Ni(:, 3));
-	sh2iso = (Niso(:, 2) - Niso0(2)) ./ (Niso0(3) - Niso(:, 3)) * 1/4;
-	scoiso = (Niso(:, 1) - Niso0(1)) ./ (Niso0(3) - Niso(:, 3));
-	scof = (Nif(:, 1) - Ni0(1)) ./ (Ni0(3) - Nif(:, 3));
-	sh2f = (Nif(:, 2) - Ni0(2)) ./ (Ni0(3) - Nif(:, 3)) * 1/4;
-
-	figure
-	plot(vol * 10^3, sh2, '-r', 'LineWidth', 1.5),hold on, grid on
-	plot(vol * 10^3, sco,'-r', 'LineWidth', 1.5) 
-	plot(vola * 10^3, scof,'-g', 'LineWidth', 1.5) 
-	plot(vola * 10^3, sh2f, '-g', 'LineWidth', 1.5), hold on, grid on
-	plot(volu * 10^3, sh2iso, 'Color','blue', 'LineWidth', 1.5), hold on, grid on
-	plot(volu * 10^3, scoiso,'Color','blue', 'LineWidth', 1.5), hold on
-	title('Selectivities of H2,CO on CH4 along the volume of catalyst');
-	xlabel('Volume of catalyst [l]');
-	ylabel('Selectivity of H2,CO on CH4');
+% 	sh2 = (Ni(:, 2) - Ni0(2)) ./ (Ni0(3) - Ni(:, 3)) * 1/4;
+% 	sco = (Ni(:, 1) - Ni0(1)) ./ (Ni0(3) - Ni(:, 3));
+% 	sh2iso = (Niso(:, 2) - Niso0(2)) ./ (Niso0(3) - Niso(:, 3)) * 1/4;
+% 	scoiso = (Niso(:, 1) - Niso0(1)) ./ (Niso0(3) - Niso(:, 3));
+% 	scof = (Nif(:, 1) - Ni0(1)) ./ (Ni0(3) - Nif(:, 3));
+% 	sh2f = (Nif(:, 2) - Ni0(2)) ./ (Ni0(3) - Nif(:, 3)) * 1/4;
+% 
+% 	figure
+% 	plot(vol * 10^3, sh2, 'Color', red, 'LineWidth', 1.5),hold on, grid on
+% 	plot(vol * 10^3, sco,'Color', red, 'LineWidth', 1.5) 
+% 	plot(vola * 10^3, scof,'Color', green, 'LineWidth', 1.5) 
+% 	plot(vola * 10^3, sh2f, 'Color', green, 'LineWidth', 1.5), hold on, grid on
+% 	plot(volu * 10^3, sh2iso, 'Color', blue, 'LineWidth', 1.5), hold on, grid on
+% 	plot(volu * 10^3, scoiso,'Color', blue, 'LineWidth', 1.5), hold on
+% 	title('Selectivities of H2,CO on CH4 along the volume of catalyst');
+% 	xlabel('Volume of catalyst [l]');
+% 	ylabel('Selectivity of H2,CO on CH4');
 
 	%%
 	% Residence time
@@ -373,12 +392,13 @@ function Comparison
 	hnof = cumtrapz(vola, 1 ./ (volflow_tot_f));
 
 	figure
-	plot(volu * 10^3, h * 10 ^ 3, 'Color', 'blue', 'LineWidth', 1.5), hold on
-	plot(vol * 10^3, hno * 10 ^ 3, '-r', 'LineWidth', 1.5), hold on
-	plot(vola * 10^3, hnof * 10 ^ 3, '-g', 'LineWidth', 1.5), hold on
+	plot(volu * 10^3, h * 10 ^ 3, 'Color', blue, 'LineWidth', 1.5), hold on
+	plot(vol * 10^3, hno * 10 ^ 3, 'Color', red, 'LineWidth', 1.5), hold on
+	plot(vola * 10^3, hnof * 10 ^ 3, 'Color', green, 'LineWidth', 1.5), hold on
 	title('Residence time profile along the volume of catalyst');
 	xlabel('Volume of catalyst [l]');
 	ylabel('Residence time [ms]');
+	xlim([0 30]);
 
 	%% 
 	% Heat of reaction
@@ -399,14 +419,14 @@ function Comparison
 	end
 
 	figure
-	plot(vol * 10^3, Qvec, '-r', 'LineWidth', 1.5), hold on
-	plot(volu * 10^3, Qvec2, 'Blue', 'LineWidth', 1.5), hold on
-	plot(vola * 10^3, Qvec3, '-g', 'LineWidth', 1.5), hold on
+	plot(vol * 10^3, Qvec, 'Color', red, 'LineWidth', 1.5), hold on
+	plot(volu * 10^3, Qvec2, 'Color', blue, 'LineWidth', 1.5), hold on
+	plot(vola * 10^3, Qvec3, 'Color', green, 'LineWidth', 1.5), hold on
 	title('Heat of reaction vs volume of catalyst');
-	xlabel('Volume of catalyst[l]');
-	ylabel('Heat of reaction [KJ]');
-	xlim([0 2]);
-	ylim([0 15000]);
+	xlabel('Volume of catalyst [l]');
+	ylabel('Heat of reaction [kW]');
+	xlim([0 30]);
+	ylim([0 10000]);
     
     %%
     % Reaction rates
