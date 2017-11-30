@@ -1,5 +1,5 @@
 %% =============================== CONTORNO ===============================
-% Aggiorna il contorno dove necessario
+% Aggiorna il contorno dove necessario.
 %%
 function [Min] = update_bound_matrix_bounds(Min, xdim, ydim)
 	Min(1, :) = Min((xdim - 1), :);

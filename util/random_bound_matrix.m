@@ -12,9 +12,9 @@ function [M] = random_bound_matrix(xdim, ydim)
 				Mtmp(x, y) = 1;
 			end
 		end
-	end
+    end
 	
-% Setta il contorno
+    % Setta il contorno
 	Mtmp(1, :) = Mtmp((xdim - 1), :);
 	Mtmp(xdim, :) = Mtmp(2, :);
 	Mtmp(:, 1) = Mtmp(:, (ydim - 1));
