@@ -14,15 +14,17 @@ addpath('../../util');			% Setta il percorso delle funzioni
 const_xdim = 22;									% Numero righe
 const_ydim = 22;									% Numero colonne
 const_iterations = 1e6;								% Numero di iterazioni
-const_interval = (const_iterations / 2000);			% Ampiezza intervallo
+const_interval = 1000;			% Ampiezza intervallo
 
 %% Variabili fisiche
 % Temperatura ridotta
 Tr = 0.5;
+kb = physconst('Boltzmann');
 
 % Costante di accoppiamento
-J = 1 / 2.269 / Tr;									% Adimensionale [J/KbT]
-beta = 1;											% Adimensionale [betaKbT]
+J = kb / (2.269 * Tr);									% Adimensionale [J/KbT]
+beta = 1/kb;											% Adimensionale [betaKbT]
+betaj = beta*J;
 
 %% Pre-allocamento
 MC = random_bound_matrix(const_xdim, const_ydim);
@@ -35,7 +37,7 @@ pcolor(MC);
 title('Sistema iniziale');
 
 %% Energia iniziale
-E0_sys = calculate_system_energy(MC, const_xdim, const_ydim, J, 0.5); 
+E0_sys = calculate_system_energy(MC, const_xdim, const_ydim, 0.5); 
 % Calcola l'energia iniziale del sistema chiamando la rispettiva funzione
 
 
@@ -57,7 +59,7 @@ for i = 1:const_iterations
 	MC = update_bound_matrix_bounds(MC, const_xdim, const_ydim);
 	
 	% Calcola l'energia dopo il cambio di spin
-	Ec_sys = calculate_system_energy(MC, const_xdim, const_ydim, J, 0.5);
+	Ec_sys = calculate_system_energy(MC, const_xdim, const_ydim, 0.5);
 	
 	% Calcola la variazione di energia
 	DeltaE = Ec_sys - E0_sys;
@@ -65,7 +67,7 @@ for i = 1:const_iterations
 	%% CONDIZIONI DI MONTECARLO
 	
 	if DeltaE > 0 		
-		if exp(-beta*DeltaE) < rand
+		if exp(-betaj*DeltaE) < rand
 			MC(a,b) = -MC(a,b);				
 			MC = update_bound_matrix_bounds(MC, const_xdim, const_ydim);
 			% se le condizioni non sono rispettate riporta lo spin al suo
@@ -74,19 +76,20 @@ for i = 1:const_iterations
 	end
 	
 	% Calcola l'energia finale del sistema
-	Efin_sys = calculate_system_energy(MC, const_xdim, const_ydim, J, 0.5);
+	Efin_sys = calculate_system_energy(MC, const_xdim, const_ydim, 0.5);
 	
 	% L'energia finale è l'energia iniziale della successiva iterazione
-	E0_sys = Efin_sys;	
+	E0_sys = Efin_sys;
+    
 
 	%% RACCOLTA
 	count = count + 1;								% Incrementa il contatore
 	VEmean_buffer(count) = Efin_sys;				% Il buffer contiene tanti valori quanto ampio è l'intervallo desiderato
-	
 	if count == const_interval
 		count = 0;									% Quando il contatore arriva all'ampiezza desiderata
 		index = index + 1;							% viene resettato e viene calcolata la media dei valori e
 		VEmean(index) = mean(VEmean_buffer);		% viene riempito un vettore con la media di ogni intervallo
+ 
 	end
 	
 end
@@ -104,3 +107,8 @@ plot(1:index,VEmean, '-r');
 title('ENERGIA FINALE DEL SISTEMA');
 ylabel('Media delle energie sugli intervalli [-]');
 xlabel('Intervalli');
+figure
+whitebg([0.125 0.125 0.125]);
+plot(1:index,VDeltaEvariance,'-r');
+title('VARIANZA');
+
