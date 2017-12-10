@@ -105,6 +105,7 @@ var = (VEmean - VEmean(end)).^2;
 cv = (var/(2.269^2*Tr^2));
 
 %% PLOT FINALI
+whitebg([1 1 1])
 % Matrice
 figure
 title('Sistema finale');
@@ -112,25 +113,25 @@ pcolor(MC)
 
 % Grafici
 figure
-plot(1:index,VEmean, '-r');
+plot(1:index,VEmean, 'LineWidth', 1.5);
 title('Energia del sistema');
 ylabel('Energia media [-]');
 xlabel('Intervalli');
 
 figure
-plot(1:index,m_mean,'-r');
+plot(1:index,m_mean, 'LineWidth', 1.5);
 title('Magnetizzazione');
 ylabel('Magnetizzazione media [-]');
 xlabel('Intervalli');
 
 figure
-plot(1:index,var,'-r');
+plot(1:index,var, 'LineWidth', 1.5);
 title('Varianza');
 xlabel('Intervalli');
 ylim([-1e4 0.5*1e5]) 
 
 figure
-plot(1:index,cv,'-r');
+plot(1:index,cv, 'LineWidth', 1.5);
 title('Cv');
 xlabel('Intervalli');
 ylim([0 8e4]);
