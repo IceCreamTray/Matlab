@@ -7,7 +7,7 @@
 
 %% ============================= MAIN SCRIPT =============================
 
-clear all,clc, close all
+% clear all, clc, close all
 addpath('../../util');			% Setta il percorso delle funzioni
 
 %% Costanti operative
@@ -18,7 +18,7 @@ const_interval = 1e3;                               % Ampiezza intervallo
 
 %% Variabili fisiche
 % Temperatura ridotta
-Tr = 0.5;
+Tr = 1.5;
 kb = physconst('Boltzmann');
 
 % Costante di accoppiamento
@@ -32,19 +32,23 @@ VEmean_buffer = zeros(1, const_interval);
 VEmean = zeros(1, ceil(const_iterations / const_interval));
 m_buffer = zeros(1, const_interval);
 m_mean = zeros(1, ceil(const_iterations / const_interval));
-var = zeros(1,ceil(const_iterations/const_interval));
 
 %% Matrice
 MC = random_bound_matrix(const_xdim, const_ydim);
 
 %% Plot iniziali
-figure
+figure(1)
+subplot(1,2,1);
 pcolor(MC);
-title('Sistema iniziale');
+title('Initial system');
 
 %% Energia iniziale
 E0_sys = calculate_system_energy(MC, const_xdim, const_ydim, 0.5); 
 % Calcola l'energia iniziale del sistema chiamando la rispettiva funzione
+
+%% Magnetizzazione iniziale
+m0 = magnetization(MC,const_xdim,const_ydim);
+% Calcola la magnetizzazione iniziale chiamando la rispettiva funzione
 
 %% Primary loop
 % Setta i contatori
@@ -101,38 +105,66 @@ for i = 1:const_iterations
 end
 
 %% Calcola varianza e Cv
-var = (VEmean - VEmean(end)).^2;
-cv = (var/(2.269^2*Tr^2));
+VEmeanstable = VEmean(300:end);
+average = mean(VEmeanstable);
+variance = var(VEmeanstable);
+cv = (variance/(2.269^2*Tr^2));
+
+disp('Energia media del sistema: ');
+disp(average);
+disp('Variance of the system: ');
+disp(variance);
+disp('Heat capacity at constant volume at equilibrium: ');
+disp(cv);
 
 %% PLOT FINALI
 whitebg([1 1 1])
 % Matrice
-figure
-title('Sistema finale');
-pcolor(MC)	
+figure(1)
+subplot(1,2,2);
+pcolor(MC)
+title('Final system');
 
 % Grafici
-figure
-plot(1:index,VEmean, 'LineWidth', 1.5);
-title('Energia del sistema');
-ylabel('Energia media [-]');
-xlabel('Intervalli');
+figure(2)
+plot(1:index,VEmean, 'LineWidth', 1.5), hold on
+title('Adimensional system energy profile');
+ylabel('Average energy on intervals [E/J]');
+xlabel('Interval');
+legend('Tr = 0.5', 'Tr = 1', 'Tr = 1.5');
 
-figure
-plot(1:index,m_mean, 'LineWidth', 1.5);
-title('Magnetizzazione');
-ylabel('Magnetizzazione media [-]');
-xlabel('Intervalli');
+figure (3)
+loglog(1:index,VEmean, 'LineWidth', 1.5), hold on
+title('Adimensional system energy profile');
+ylabel('Average energy on intervals [E/J]');
+xlabel('Interval');
+legend('Tr = 0.5', 'Tr = 1', 'Tr = 1.5');
 
-figure
-plot(1:index,var, 'LineWidth', 1.5);
-title('Varianza');
-xlabel('Intervalli');
-ylim([-1e4 0.5*1e5]) 
+figure (4)
+plot(1:index,m_mean, 'LineWidth', 1.5), hold on
+title('Adimensional magnetization profile');
+ylabel('Average magnetization on intervals [M/\mu]');
+xlabel('Interval');
+legend('Tr = 0.5', 'Tr = 1', 'Tr = 1.5');
 
-figure
-plot(1:index,cv, 'LineWidth', 1.5);
-title('Cv');
-xlabel('Intervalli');
-ylim([0 8e4]);
+figure (5)
+loglog(1:index,m_mean, 'LineWidth', 1.5), hold on
+title('Adimensional magnetization profile');
+ylabel('Average magnetization on intervals [M/\mu]');
+xlabel('Interval');
+legend('Tr = 0.5', 'Tr = 1', 'Tr = 1.5');
+
+
+% figure
+% plot(1:index,var, 'LineWidth', 1.5);
+% title('Varianza');
+% xlabel('Intervalli');
+% ylim([-1e4 0.5*1e5]) 
+% 
+% figure
+% plot(1:index,cv, 'LineWidth', 1.5);
+% title('Cv');
+% xlabel('Intervalli');
+% xlim([275 1000]);
+
 
