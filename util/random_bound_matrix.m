@@ -1,5 +1,5 @@
-%% ============================== MATRICE ================================
-% Crea la matrice 20x20 riempiendola con 1 o -1.
+%% ============================== MATRIX ================================
+% Creates 22x22 matrix filling it with 1 or -1.
 %%
 function [M] = random_bound_matrix(xdim, ydim)
 	Mtmp = rand(xdim, ydim);				
