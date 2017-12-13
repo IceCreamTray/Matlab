@@ -9,31 +9,31 @@
 
 %% ============================= MAIN SCRIPT =============================
 
-% clear all, clc, close all
+clear all, clc, close all
 addpath('../../util');								% Functions folder path
 
 %% Operating variables
-const_xdim = 22;									% Raws
+const_xdim = 22;									% Rows
 const_ydim = 22;									% Columns
 const_iterations = 1e6;								% iterations needed
 const_interval = 1e3;                               % Sampling interval
 
 %% Physical variables
 % Reduced temperature
-Tr = 1.5; 
-%Tr = 0.5; 
-%Tr = 1;
+Tr = 0.5; 
+%Tr = 1; 
+%Tr = 1.5;
 
 % Boltzmann constant
 kb = physconst('Boltzmann');
 
 % Coupling constant
 J = kb / (2.269 * Tr);									% Adimensional
-beta = 1 / kb;											% Adimensional 
-betaj = beta * J;
+beta = 1 / kb;											 
+betaj = beta * J;										% Adimensional
 
 %% Pre-allocation
-MC = zeros(22,22);
+MC = zeros(const_xdim,const_ydim);
 VEmean_buffer = zeros(1, const_interval);
 VEmean = zeros(1, ceil(const_iterations / const_interval));
 m_buffer = zeros(1, const_interval);
@@ -159,7 +159,7 @@ xlabel('Interval');
 legend('Tr = 0.5', 'Tr = 1', 'Tr = 1.5');
 
 figure (5)
-loglog(1:index,m_mean, 'LineWidth', 1.5), hold on
+semilogx(1:index,m_mean, 'LineWidth', 1.5), hold on
 title('Adimensional magnetization profile');
 ylabel('Average magnetization on intervals [M/\mu]');
 xlabel('Interval');
