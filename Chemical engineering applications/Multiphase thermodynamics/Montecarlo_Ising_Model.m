@@ -9,7 +9,7 @@
 
 %% ============================= MAIN SCRIPT =============================
 
-clear all, clc, close all
+%clear all, clc, close all
 addpath('../../util');								% Functions folder path
 
 %% Operating variables
@@ -17,12 +17,14 @@ const_xdim = 22;									% Rows
 const_ydim = 22;									% Columns
 const_iterations = 1e6;								% iterations needed
 const_interval = 1e3;                               % Sampling interval
+equilibrium_sampling = 700;                         % Indicates the interval at which the equilibrium is reached
 
 %% Physical variables
 % Reduced temperature
-Tr = 0.5; 
+%Tr = 0.5; 
 %Tr = 1; 
 %Tr = 1.5;
+Tr=15;
 
 % Boltzmann constant
 kb = physconst('Boltzmann');
@@ -115,10 +117,12 @@ for i = 1:const_iterations
 end
 
 %% Variance and Cv calculation
-VEmeanstable = VEmean(300:end);						% By graphical analysis, it is observed that 
+VEmeanstable = VEmean(equilibrium_sampling:end);						% By graphical analysis, it is observed that 
+magnetstable=m_mean(equilibrium_sampling:end);
 average = mean(VEmeanstable);						% the equilibrium is reached after 300 sampling intervals.
 variance = var(VEmeanstable);
 cv = (variance/(2.269^2*Tr^2));
+magnet = mean(magnetstable)
 
 % Display
 disp('Average system energy at equilibrium: ');
