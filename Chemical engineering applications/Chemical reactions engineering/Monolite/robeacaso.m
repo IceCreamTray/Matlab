@@ -82,18 +82,15 @@ function [sol]=solution(time,par)
 	Rg = 8.314;
 
 	M = [1 0
-     0 0];
+		0 0];
 options = odeset('Mass',M);	
 sol = ode15s(@Bmi,time,C0,options,par,nu,Rg,T,a,hm);
 
 end
 
 function  [ADE]=Bmi(time,Cexp,par,nu,Rg,T,a,hm)
-disp(par)
-disp(nu)
-disp(Rg)
-Cexp1 = Cexp(1:5)
-Cexp2 = Cexp(6:10)
+
+Cexp1 = Cexp(1)
 	A = par(1);
 	Ea = par(2);
 	k = A.*exp(-Ea./(Rg.*T));
@@ -104,7 +101,7 @@ r = nu * R
 
 
 ADE = [    -a*hm * Cexp1
-              hm * Cexp2+r  ]
+              hm * Cexp1+r  ]
 end
 
 end
