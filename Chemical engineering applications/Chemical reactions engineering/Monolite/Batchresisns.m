@@ -33,7 +33,7 @@ for Tidx = 1 : length(Tvec)
 	cinsoda = coutsoda(1, 1);
 	
 	for i = 1 : length(coutsoda)
-		if (coutsoda(i) = NaN)
+		if (coutsoda(i) == NaN)
 			coutsoda(i) = [];
 		end
 	end
