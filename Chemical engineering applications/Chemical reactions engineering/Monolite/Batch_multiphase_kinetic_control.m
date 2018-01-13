@@ -93,7 +93,10 @@ function sol = Batch(par, time, cinsoda, temperature)
 	fiS = resin/vol;        % Frazione di solido [-]
 	fiL = soda/vol;        % Frazione di liquido [-]
 	aS = 6/D;               % Area specifica del solido - [1/cm]
-	aL = aS*(1-porosity)/porosity;
+	fiS = resin/vol;        % Frazione di solido [-]
+fiL = soda/vol;        % Frazione di liquido [-]
+aS = 6/D;               % Area specifica del solido - [1/m]
+aL = fiS*aS/fiL;        % Area specifica del liquido - [1/m]
 	sol = ode15s(@BMi,time,cinsoda,[],par,temperature,Rg,nu,aL);
 end
 	
@@ -101,7 +104,7 @@ function Cprimo = BMi(time,c,par,Tin,Rg,nu,aL)
 	A=par(1);
 	Ea=par(2);
 	k = A*exp(-Ea/Rg/Tin);
-	R = k*c/aL;
+	R = k*c*aL;
 	r = nu*R;
 	Cprimo = r';
 end
