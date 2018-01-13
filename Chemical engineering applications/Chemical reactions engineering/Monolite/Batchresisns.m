@@ -25,32 +25,40 @@ opt=optimset('Display','Iter');
 
 par0 = [0.1 0.1];
 
+
+global results_C1;
+global results_t1;
+
 Tvec = [ 5 17.5 30.6 43] + 273.15;
-for Tidx = 1 : length(Tvec)
+Tvec_len = length(Tvec);
+results_C1 = {};
+results_t1 = {};
+for Tidx = 1 : Tvec_len
 	temperature = Tvec(Tidx);
 	time = Trials_trimmed(:,1);	%s
 	coutsoda = Trials_trimmed(:, (Tidx + 1)) / 1e3;
 	cinsoda = coutsoda(1, 1);
 	
-	for i = 1 : length(coutsoda)
-		if (coutsoda(i) == NaN)
-			coutsoda(i) = [];
-		end
-	end
-
-	[par,fval] = fminsearch(@err, par0, opt, time, cinsoda, temperature, coutsoda);
+	[par,fval] = fminsearch(@err, par0, opt, time, cinsoda, temperature, coutsoda, Tidx);
 	disp(fval);
 	disp(par);
+	plot(results_t1{Tidx},results_C1{Tidx},time,coutsoda,'s'),hold on
+	drawnow
 end
 
-function S = err(par, time, cinsoda, temperature,coutsoda)
+disp('poop');
+	
+
+function S = err(par, time, cinsoda, temperature,coutsoda, index)
 	sol = Batch(par, time, cinsoda, temperature);
 	Ccalc = deval(sol, time)';
 	S = norm(Ccalc - coutsoda);
 	t1   = linspace(min(time),max(time),100); 
 	C1   = deval(sol,t1);
-	plot(t1,C1,time,coutsoda,'s'), hold on
-	drawnow
+	global results_C1;
+	global results_t1;
+	results_t1{index} = t1;
+	results_C1{index} = C1;
 end
 
 function sol = Batch(par, time, cinsoda, temperature)
