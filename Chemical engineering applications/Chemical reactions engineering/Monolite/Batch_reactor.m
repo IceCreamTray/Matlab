@@ -39,7 +39,7 @@ Ea_vec = zeros(1,Tvec_len);
 for Tidx = 1 : Tvec_len
 	temperature = Tvec(Tidx);
 	time = Trials_trimmed(:,1);	%s
-	coutsoda = Trials_trimmed(:, (Tidx + 1)) %mol/m^3;
+	coutsoda = Trials_trimmed(:, (Tidx + 1))/10^6 %mol/cm^3;
 	for i = 1 : length(coutsoda)
 		if coutsoda(i) == 0
 			time = time(1:(i - 1));
