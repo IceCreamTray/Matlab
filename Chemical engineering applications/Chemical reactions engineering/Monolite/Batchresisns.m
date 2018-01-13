@@ -29,36 +29,43 @@ Tvec = [ 5 17.5 30.6 43] + 273.15;
 for Tidx = 1 : length(Tvec)
 	temperature = Tvec(Tidx);
 	time = Trials_trimmed(:,1);	%s
-	coutsoda = Trails_trimmed(:, (Tidx + 1)) / 1e3;
+	coutsoda = Trials_trimmed(:, (Tidx + 1)) / 1e3;
 	cinsoda = coutsoda(1, 1);
+	
+	for i = 1 : length(coutsoda)
+		if (coutsoda(i) = NaN)
+			coutsoda(i) = [];
+		end
+	end
 
 	[par,fval] = fminsearch(@err, par0, opt, time, cinsoda, temperature, coutsoda);
 	disp(fval);
 	disp(par);
+end
 
-	function S = err(par, time, cinsoda, temperature,coutsoda)
-		sol = Batch(par, time, cinsoda, temperature);
-		Ccalc = deval(sol, time)';
-		S = norm(Ccalc - coutsoda);
-		t1   = linspace(min(time),max(time),100); 
-		C1   = deval(sol,t1);
-		plot(t1,C1,time,coutsoda,'s')
-		drawnow
-	end
+function S = err(par, time, cinsoda, temperature,coutsoda)
+	sol = Batch(par, time, cinsoda, temperature);
+	Ccalc = deval(sol, time)';
+	S = norm(Ccalc - coutsoda);
+	t1   = linspace(min(time),max(time),100); 
+	C1   = deval(sol,t1);
+	plot(t1,C1,time,coutsoda,'s'), hold on
+	drawnow
+end
 
-	function sol = Batch(par, time, cinsoda, temperature)
-		nu = -1;
-		Rg = 8.314; %J/kmol
-		sol = ode15s(@BMi,time,cinsoda,[],par,temperature,Rg,nu);
-	end
-	function Cprimo = BMi(time,c,par,Tin,Rg,nu)
-		A=par(1);
-		Ea=par(2);
-		k = A*exp(-Ea/Rg/Tin);
-		R = k*c;
-		r = nu*R;
-		Cprimo = r';
-	end
+function sol = Batch(par, time, cinsoda, temperature)
+	nu = -1;
+	Rg = 8.314; %J/kmol
+	sol = ode15s(@BMi,time,cinsoda,[],par,temperature,Rg,nu);
+end
+	
+function Cprimo = BMi(time,c,par,Tin,Rg,nu)
+	A=par(1);
+	Ea=par(2);
+	k = A*exp(-Ea/Rg/Tin);
+	R = k*c;
+	r = nu*R;
+	Cprimo = r';
 end
 
 
