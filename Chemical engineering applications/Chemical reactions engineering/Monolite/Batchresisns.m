@@ -26,19 +26,27 @@ opt=optimset('Display','Iter');
 par0 = [0.1 0.1];
 
 
-[par,fval] = fminsearch(@err, par0, opt, Trials_trimmed);
+global results_C1;
+global results_t1;
+results_C1 = {};
+results_t1 = {};
+
+Tvec = [ 5 17.5 30.6 43] + 273.15;
+Tvec_len = length(Tvec);
+
+time = Trials_trimmed(:,1);	%s
+
+
+[par,fval] = fminsearch(@err, par0, opt, Trials_trimmed, Tvec, Tvec_len, time);
 disp(fval);
 disp(par);
 
-
-function S = err(par, data)
-	Tvec = [ 5 17.5 30.6 43] + 273.15;
-	Tvec_len = length(Tvec);
-	results_C1 = {};
-	results_t1 = {};
+function S = err(par, data, Tvec, Tvec_len, time)
+	global results_C1;
+	global results_t1;
+	
 	for Tidx = 1 : Tvec_len
 		temperature = Tvec(Tidx);
-		time = data(:,1);	%s
 		coutsoda = data(:, (Tidx + 1)) / 1e3;
 		cinsoda = coutsoda(1, 1);
 	
@@ -48,9 +56,14 @@ function S = err(par, data)
 		t1   = linspace(min(time),max(time),100); 
 		C1   = deval(sol,t1);
 		
-		plot(t1,C1,time,coutsoda,'s'),hold on
-		drawnow
+		results_t1{Tidx} = t1;
+		results_C1{Tidx} = C1;
 	end
+end
+
+for i = 1 : Tvec_len
+	plot(results_t1{i}, results_C1{i}, time, Trials_trimmed(:, (i + 1)), 's'), hold on
+	drawnow
 end
 
 function sol = Batch(par, time, cinsoda, temperature)
