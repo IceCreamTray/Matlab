@@ -21,6 +21,9 @@ aS = 6 / D;										% Specific solid area - [1/cm]
 aL = fiS * aS / fiL;							% Specific liquid area - [1/cm]
 Tvec = [ 5 17.5 30.6 43] + 273.15;				% K
 
+%% Colors
+Lcol = { [1 0 0] [0 1 0] [0 0 1] [0 0 0] };
+
 %% Options
 opt = optimset('Display','Iter');
 
@@ -58,8 +61,8 @@ for Tidx = 1 : Tvec_len
 	A_vec(Tidx) = par(1);
 	Ea_vec(Tidx) = par(2);
 	
-	a = plot(results_t1{Tidx},results_C1{Tidx},time,coutsoda,'o'),hold on
-	set(a, 'Color', [0.2+(0.2*Tidx) 0.2 0.4], 'LineWidth', 1.25);
+	a = plot(results_t1{Tidx},results_C1{Tidx},time,coutsoda,'o');hold on
+	set(a, 'Color', Lcol{Tidx}, 'LineWidth', 1.25);
 	title('Fitted experimental curves for a multiphase batch reactor under KC');
 	ylabel('Concentration of OH- [mol/L]');
 	xlabel('Time [s]');
@@ -111,7 +114,7 @@ function sol = Batch(par, time, cinsoda, temperature)
 	Rg = 8.314;									% J/K mol
 	porosity = 0.225;							% [-]
 	soda = 470 * 10^3;							% cm^3
-	resin = 10 * 10^3							% cm^3
+	resin = 10 * 10^3;							% cm^3
 	vol = soda + resin;							% cm^3
 	xsoda = soda / vol;							% [-]
 	xresin = resin / vol;						% [-]

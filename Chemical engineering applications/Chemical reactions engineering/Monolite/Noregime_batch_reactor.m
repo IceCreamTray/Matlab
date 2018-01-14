@@ -6,31 +6,34 @@ Trials = xlsread('Expdata.xlsx');
 Trials_trimmed = Trials(8:end, :);
 
 %% constants
-Rg = 8.314;										% J/K mol
+Rg = 8.314;														% J/K mol
 nu = -1;
 
 %% Data
-soda = 470*1e-6;								% L
-resin = 10*1e-6;								% L
-vol = soda+resin;								% L
-porosity = 0.225;								% [-]
-D = 650e-4;										% Resins sphere diameter - [cm]
-fiS = resin / vol;								% Solid fraction [-]
-fiL = soda / vol;								% Liquid fraction [-]
-aS = 6 / D;										% Specific solid area - [1/cm]
-aL = fiS * aS / fiL;							% Specific liquid area - [1/cm]
-Tvec = [ 5 17.5 30.6 43] + 273.15;				% K
-diff = Rg * 10^-3 .* Tvec /(96500 * (1/50.1 + 1/197.6));	% Diffusivity coefficient
+soda = 470*1e-6;												% L
+resin = 10*1e-6;												% L
+vol = soda+resin;												% L
+porosity = 0.225;												% [-]
+D = 650e-4;														% Resins sphere diameter - [cm]
+fiS = resin / vol;												% Solid fraction [-]
+fiL = soda / vol;												% Liquid fraction [-]
+aS = 6 / D;														% Specific solid area - [1/cm]
+aL = fiS * aS / fiL;											% Specific liquid area - [1/cm]
+Tvec = [ 5 17.5 30.6 43] + 273.15;								% K
+diff = Rg * 10^-3 .* Tvec /(96500 * (1/50.1 + 1/197.6));		% Diffusivity coefficient
 rho = 2.13 * 10^-3;												% Kg/cm^3
 vrel = 1;														% cm/s
 mu = 0.087														% Pa*s
 Rep = rho * vrel * D / mu;										% Reynolds number
 Sc = mu / rho ./ diff;											% Schmidt number
-Sh = 2 + 0.44 * Rep^0.5 .* Sc.^0.38;								% Sherwood number
-hm = Sh .* diff / D;												% cm/s
+Sh = 2 + 0.44 * Rep^0.5 .* Sc.^0.38;							% Sherwood number
+hm = Sh .* diff / D;											% cm/s
+
+%% Colors
+Lcol = { [1 0 0] [0 1 0] [0 0 1] [0 0 0] };
 
 %% Guess on parameters
-par0 = [ 10 10000];
+par0 = [50 10000];
 
 %% Variables declaration
 global results_C1;
@@ -49,8 +52,8 @@ opt = optimset('Display','Iter');
 for Tidx = 1 : Tvec_len
 	
 	temperature = Tvec(Tidx);
-	time = Trials_trimmed(:,1);							% s
-	coutsoda = Trials_trimmed(:, (Tidx + 1)) / 10^6;	% mol/cm^3;
+	time = Trials_trimmed(:,1);									% s
+	coutsoda = Trials_trimmed(:, (Tidx + 1)) / 10^6;			% mol/cm^3;
 	
 	for i = 1 : length(coutsoda)
 		if coutsoda(i) == 0
@@ -66,8 +69,8 @@ for Tidx = 1 : Tvec_len
 	A_vec(Tidx) = par(1);
 	Ea_vec(Tidx) = par(2);
 	
-	a = plot(results_t1{Tidx},results_C1{Tidx},time,coutsoda,'o'),hold on
-	set(a, 'Color', [0.2+(0.2*Tidx) 0.2 0.4], 'LineWidth', 1.25);
+	a = plot(results_t1{Tidx},results_C1{Tidx},time,coutsoda,'o');hold on
+	set(a, 'Color', Lcol{Tidx}, 'LineWidth', 1.25);
 	title('Fitted experimental curves for a multiphase batch reactor, general case');
 	ylabel('Concentration of OH- [mol/L]');
 	xlabel('Time [s]');
@@ -119,7 +122,7 @@ function sol = Batch(par, time, cinsoda, temperature)
 	Rg = 8.314;														% J/K mol
 	porosity = 0.225;												% [-]
 	soda = 470 * 10^3;												% cm^3
-	resin = 10 * 10^3												% cm^3
+	resin = 10 * 10^3;												% cm^3
 	vol = soda + resin;												% cm^3
 	xsoda = soda / vol;												% [-]
 	xresin = resin / vol;											% [-]
@@ -148,7 +151,7 @@ function Cprimo = BMi(time,c,par,Tin,Rg,nu,aL,hm)
 	Ea = par(2);
 	k = A*exp(-Ea/Rg/Tin);
 	kapp = hm*k/(hm+k);
-	R = k*c*aL;
+	R = kapp*c*aL;
 	r = nu*R;
 	Cprimo = r';
 	

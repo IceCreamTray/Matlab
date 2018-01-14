@@ -21,6 +21,8 @@ aS = 6 / D;										% Specific solid area - [1/cm]
 aL = fiS * aS / fiL;							% Specific liquid area - [1/cm]
 Tvec = [ 5 17.5 30.6 43] + 273.15;				% K
 
+%% Colors
+Lcol = { [1 0 0] [0 1 0] [0 0 1] [0 0 0] };
 
 %% Options
 opt = optimset('Display','Iter');
@@ -41,8 +43,8 @@ disp('poop love');
 for Tidx = 1 : Tvec_len
 	
 	temperature = Tvec(Tidx);
-	time = Trials_trimmed(:,1);						% s
-	coutsoda = Trials_trimmed(:, (Tidx + 1))/10^6;	% mol/cm^3;
+	time = Trials_trimmed(:,1);										% s
+	coutsoda = Trials_trimmed(:, (Tidx + 1))/10^6;					% mol/cm^3;
 	
 		for i = 1 : length(coutsoda)
 			if coutsoda(i) == 0
@@ -55,8 +57,8 @@ for Tidx = 1 : Tvec_len
 	
 	solution = Batch(time,cinsoda,temperature);
 	
-	a = plot(solution.x,solution.y,time,coutsoda,'o'),hold on
-	set(a, 'Color', [1/(Tidx) 0 0], 'LineWidth', 1.25);
+	a = plot(solution.x,solution.y,time,coutsoda,'o');hold on
+	set(a, 'Color', Lcol{Tidx}, 'LineWidth', 1.25);
 	title('Fitted experimental curves for a multiphase batch reactor under MTC');
 	ylabel('Concentration of OH- [mol/L]');
 	xlabel('Time [s]');
@@ -74,7 +76,7 @@ function sol = Batch(time, cinsoda, temperature)
 	Rg = 8.314;														% J/K mol
 	porosity = 0.225;												% [-]
 	soda = 470 * 10^3;												% cm^3
-	resin = 10 * 10^3												% cm^3
+	resin = 10 * 10^3;												% cm^3
 	vol = soda + resin;												% cm^3
 	xsoda = soda / vol;												% [-]
 	xresin = resin / vol;											% [-]
@@ -87,7 +89,7 @@ function sol = Batch(time, cinsoda, temperature)
 	diff = Rg * 10^-3 * temperature /(96500 * (1/50.1 + 1/197.6));	% Diffusivity coefficient
 	rho = 2.13 * 10^-3;												% Kg/cm^3
 	vrel = 1;														% cm/s
-	mu = 0.087														% Pa*s
+	mu = 0.087;														% Pa*s
 	Rep = rho * vrel * D / mu;										% Reynolds number
 	Sc = mu / rho / diff;											% Schmidt number
 	Sh = 2 + 0.44 * Rep^0.5 * Sc^0.38;								% Sherwood number

@@ -18,6 +18,9 @@ phiS = resin / vol;									% [-]
 porosity = 0.225;									% [-]
 Tvec = [5 17.5 30.6 43] + 273.15;					% [K]
 
+%% Colors
+Lcol = { [1 0 0] [0 1 0] [0 0 1] [0 0 0] };
+
 %% options
 opt = optimset('Display','Iter');
 
@@ -55,8 +58,8 @@ for Tidx = 1 : Tvec_len
 	Ea_vec(Tidx) = par(2);
 	
 
-	a = plot(results_t1{Tidx},results_C1{Tidx}/10^-3,time,coutsoda/10^-3,'o'),hold on
-	set(a, 'Color', [Tidx/10 Tidx/5 Tidx/10], 'LineWidth', 1.25);
+	a = plot(results_t1{Tidx},results_C1{Tidx}/10^-3,time,coutsoda/10^-3,'o');hold on
+	set(a, 'Color', Lcol{Tidx}, 'LineWidth', 1.25);
 	title('Fitted experimental curves for a monophase batch reactor')
 	ylabel('Concentration of OH- [mol/L]');
 	xlabel('Time [s]');
