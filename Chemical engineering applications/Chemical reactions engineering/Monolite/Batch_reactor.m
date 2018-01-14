@@ -53,6 +53,7 @@ for Tidx = 1 : Tvec_len
 	
 	A_vec(Tidx) = par(1);
 	Ea_vec(Tidx) = par(2);
+	
 
 	a = plot(results_t1{Tidx},results_C1{Tidx}/10^-3,time,coutsoda/10^-3,'o'),hold on
 	set(a, 'Color', [Tidx/10 Tidx/5 Tidx/10], 'LineWidth', 1.25);
@@ -64,14 +65,22 @@ for Tidx = 1 : Tvec_len
 		'calculated Cout_O_H_- at 30.6°C','Cexp,out_O_H_- at 30.6°C',...
 		'calculated Cout_O_H_- at 43°C','Cexp,out_O_H_- at 43°C','Location','Northeast');
 	drawnow
-	
 end
 
 %% Fitted parameters for different temperatures
 disp('Fitted pre-exponential factor: ');
-pre_exp = mean(A_vec);
+pre_exp = mean(A_vec)
 disp('Fitted activation energy: ');
-act_energy = mean(Ea_vec);
+act_energy = mean(Ea_vec)
+
+%% Arrhenius plot
+figure
+k = pre_exp*exp(act_energy/Rg./Tvec);
+lnk = log(k);
+plot(1./Tvec,lnk, 'Linewidth', 1.5);
+title('Kinetic constant as function of T');
+ylabel('lnK');
+xlabel('1/T [1/K]');
 
 %% Lovely message
 disp('poop love');

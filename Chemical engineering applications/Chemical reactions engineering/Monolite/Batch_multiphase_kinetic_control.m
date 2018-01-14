@@ -73,9 +73,18 @@ end
 
 %% Fitted parameters for different temperatures
 disp('Fitted pre-exponential factor: ');
-pre_exp = mean(A_vec);
+pre_exp = mean(A_vec)
 disp('Fitted activation energy: ');
-act_energy = mean(Ea_vec);
+act_energy = mean(Ea_vec)
+
+%% Arrhenius plot
+figure
+k = pre_exp*exp(act_energy/Rg./Tvec);
+lnk = log(k);
+plot(1./Tvec,lnk, 'Linewidth', 1.5);
+title('Kinetic constant as function of T');
+ylabel('lnK');
+xlabel('1/T [1/K]');
 
 %% Lovely message
 disp('poop love');
