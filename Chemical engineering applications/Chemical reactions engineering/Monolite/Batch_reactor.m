@@ -59,6 +59,10 @@ for Tidx = 1 : Tvec_len
 	title('Fitted experimental curves for a monophase batch reactor')
 	ylabel('Concentration of OH- [mol/L]');
 	xlabel('Time [s]');
+	legend('calculated Cout_O_H_- at 5°C','Cexp,out_O_H_- at 5°C',...
+		'calculated Cout_O_H_- at 17.5°C','Cexp,out_O_H_- at 17.5°C',...
+		'calculated Cout_O_H_- at 30.6°C','Cexp,out_O_H_- at 30.6°C',...
+		'calculated Cout_O_H_- at 43°C','Cexp,out_O_H_- at 43°C','Location','Northeast');
 	drawnow
 	
 end
