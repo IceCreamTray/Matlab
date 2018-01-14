@@ -1,45 +1,45 @@
 clc,clear all,close all
-% Read experimental data
+% Reaction is R-plus + Naoh = R-na + oh-
+
+%% Read experimental data from xlsx
 Trials = xlsread('Expdata.xlsx');
 Trials_trimmed = Trials(8:end, :);
 
-%constants
-Rg = 8.314 %J/K mol
-nu = -1;
-% Reaction is R-plus + Naoh = R-na + oh-
-% Data
-soda = 470*1e-3	%L
-resin = 10*1e-3	%L
-vol = soda+resin;	%L
-xsoda = soda/vol;
-xresin = resin/vol;
-porosity = 0.225;	%[-]
+%% constants
+Rg = 8.314;										%J/K mol
+nu = -1;							
 
-% Concentrations
-%plot to check
-%scatter(t,coutsoda);
+%% Data
+soda = 470 * 1e-3;									%L
+resin = 10 * 1e-3;									%L
+vol = soda + resin;									%L
+phiL = soda / vol;									%[-]
+phiS = resin / vol;									%[-]
+porosity = 0.225;									%[-]
+Tvec = [5 17.5 30.6 43] + 273.15;					%[K]
 
-%axes color
-set(0,'DefaultAxesColorOrder',[1 0 0; .1 1 .1; 0 0 1]);
-opt=optimset('Display','Iter');
+%% options
+opt = optimset('Display','Iter');
 
+%% Guess on parameters
 par0 = [60 19500];
 
-
+%% Variables definition
 global results_C1;
 global results_t1;
-
-Tvec = [ 5 17.5 30.6 43] + 273.15;
 Tvec_len = length(Tvec);
 results_C1 = {};
 results_t1 = {};
 A_vec = zeros(1,Tvec_len);
 Ea_vec = zeros(1,Tvec_len);
 
+%% Inlet and experimental data, search for the minimum of error function
 for Tidx = 1 : Tvec_len
+	
 	temperature = Tvec(Tidx);
-	time = Trials_trimmed(:,1);	%s
-	coutsoda = Trials_trimmed(:, (Tidx + 1))/10^6 %mol/cm^3;
+	time = Trials_trimmed(:,1);						%s
+	coutsoda = Trials_trimmed(:, (Tidx + 1))/10^6;	%mol/cm^3;
+	
 	for i = 1 : length(coutsoda)
 		if coutsoda(i) == 0
 			time = time(1:(i - 1));
@@ -50,19 +50,31 @@ for Tidx = 1 : Tvec_len
 	cinsoda = coutsoda(1, 1);
 	
 	[par,fval] = fminsearch(@err, par0, opt, time, cinsoda, temperature, coutsoda, Tidx);
+	
 	A_vec(Tidx) = par(1);
 	Ea_vec(Tidx) = par(2);
-	plot(results_t1{Tidx},results_C1{Tidx},time,coutsoda,'s'),hold on
+
+	a = plot(results_t1{Tidx},results_C1{Tidx}/10^-3,time,coutsoda/10^-3,'o'),hold on
+	set(a, 'Color', [Tidx/10 Tidx/5 Tidx/10], 'LineWidth', 1.25);
+	title('Fitted experimental curves for a monophase batch reactor')
+	ylabel('Concentration of OH- [mol/L]');
+	xlabel('Time [s]');
 	drawnow
+	
 end
 
-pre_exp = mean(A_vec)
-act_energy = mean(Ea_vec)
+%% Fitted parameters for different temperatures
+disp('Fitted pre-exponential factor: ');
+pre_exp = mean(A_vec);
+disp('Fitted activation energy: ');
+act_energy = mean(Ea_vec);
 
+%% Lovely message
 disp('poop love');
 	
-
+%% Error function
 function S = err(par, time, cinsoda, temperature,coutsoda, index)
+
 	sol = Batch(par, time, cinsoda, temperature);
 	Ccalc = deval(sol, time)';
 	S = norm(Ccalc - coutsoda);
@@ -72,21 +84,28 @@ function S = err(par, time, cinsoda, temperature,coutsoda, index)
 	global results_t1;
 	results_t1{index} = t1;
 	results_C1{index} = C1;
+	
 end
 
+%% Solution function
 function sol = Batch(par, time, cinsoda, temperature)
+
 	nu = -1;
-	Rg = 8.314; %J/ K mol
+	Rg = 8.314;													%J/ K mol
 	sol = ode15s(@BMi,time,cinsoda,[],par,temperature,Rg,nu);
-end
 	
+end
+
+%% Mass balance for a monophase batch reactor, first order kinetics
 function Cprimo = BMi(time,c,par,Tin,Rg,nu)
-	A=par(1);
-	Ea=par(2);
+
+	A = par(1);
+	Ea = par(2);
 	k = A*exp(-Ea/Rg/Tin);
 	R = k*c;
 	r = nu*R;
 	Cprimo = r';
+	
 end
 
 
