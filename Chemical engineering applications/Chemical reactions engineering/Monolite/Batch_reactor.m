@@ -6,17 +6,17 @@ Trials = xlsread('Expdata.xlsx');
 Trials_trimmed = Trials(8:end, :);
 
 %% constants
-Rg = 8.314;										%J/K mol
+Rg = 8.314;										% J/K mol
 nu = -1;							
 
 %% Data
-soda = 470 * 1e-3;									%L
-resin = 10 * 1e-3;									%L
-vol = soda + resin;									%L
-phiL = soda / vol;									%[-]
-phiS = resin / vol;									%[-]
-porosity = 0.225;									%[-]
-Tvec = [5 17.5 30.6 43] + 273.15;					%[K]
+soda = 470 * 1e-3;									% L
+resin = 10 * 1e-3;									% L
+vol = soda + resin;									% L
+phiL = soda / vol;									% [-]
+phiS = resin / vol;									% [-]
+porosity = 0.225;									% [-]
+Tvec = [5 17.5 30.6 43] + 273.15;					% [K]
 
 %% options
 opt = optimset('Display','Iter');
@@ -37,8 +37,8 @@ Ea_vec = zeros(1,Tvec_len);
 for Tidx = 1 : Tvec_len
 	
 	temperature = Tvec(Tidx);
-	time = Trials_trimmed(:,1);						%s
-	coutsoda = Trials_trimmed(:, (Tidx + 1))/10^6;	%mol/cm^3;
+	time = Trials_trimmed(:,1);						% s
+	coutsoda = Trials_trimmed(:, (Tidx + 1))/10^6;	% mol/cm^3;
 	
 	for i = 1 : length(coutsoda)
 		if coutsoda(i) == 0
@@ -91,7 +91,7 @@ end
 function sol = Batch(par, time, cinsoda, temperature)
 
 	nu = -1;
-	Rg = 8.314;													%J/ K mol
+	Rg = 8.314;													% J/ K mol
 	sol = ode15s(@BMi,time,cinsoda,[],par,temperature,Rg,nu);
 	
 end
