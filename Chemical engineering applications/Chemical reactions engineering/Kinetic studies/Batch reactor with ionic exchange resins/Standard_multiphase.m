@@ -132,7 +132,8 @@ function sol = Batch(par, time, cinsoda, temperature)
 	fiL = soda / vol;												% Liquid fraction [-]
 	aS = 6 / D;														% Solid specific area - [1/cm]
 	aL = fiS * aS / fiL;											% Liquid specific area - [1/cm]
-	diff = Rg * 10^-3 * temperature /(96500 * (1/50.1 + 1/197.6));	% Diffusivity coefficient
+	diff = (Rg * 10^-3 * temperature /(96500 * (1/50.1 + 1/197.6)))...
+			*porosity*10^2;											% Diffusivity coefficient
 	rho = 2.13 * 10^-3;												% Kg/cm^3
 	vrel = 1;														% cm/s
 	mu = 0.087														% Pa*s

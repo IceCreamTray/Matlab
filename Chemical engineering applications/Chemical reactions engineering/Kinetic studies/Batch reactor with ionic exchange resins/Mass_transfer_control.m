@@ -59,7 +59,7 @@ for Tidx = 1 : Tvec_len
 	
 	a = plot(solution.x,solution.y,time,coutsoda,'o');hold on
 	set(a, 'Color', Lcol{Tidx}, 'LineWidth', 1.25);
-	title('Fitted experimental curves for a multiphase batch reactor under MTC');
+	title('Curves for a multiphase batch reactor under MTC vs experimental data');
 	ylabel('Concentration of OH- [mol/L]');
 	xlabel('Time [s]');
 	legend('calculated Cout_O_H_- at 5°C','Cexp,out_O_H_- at 5°C',...
@@ -86,7 +86,8 @@ function sol = Batch(time, cinsoda, temperature)
 	fiL = soda / vol;												% Liquid fraction [-]
 	aS = 6 / D;														% Solid specific area - [1/cm]
 	aL = fiS * aS / fiL;											% Liquid specific area - [1/cm]
-	diff = Rg * 10^-3 * temperature /(96500 * (1/50.1 + 1/197.6));	% Diffusivity coefficient
+	diff = (Rg * 10^-3 * temperature /(96500 * (1/50.1 + 1/197.6)))...
+			*porosity*10^2;											% Diffusivity coefficient
 	rho = 2.13 * 10^-3;												% Kg/cm^3
 	vrel = 1;														% cm/s
 	mu = 0.087;														% Pa*s
