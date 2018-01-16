@@ -82,7 +82,7 @@ act_energy = mean(Ea_vec)
 
 %% Arrhenius plot
 figure
-k = pre_exp*exp(act_energy/Rg./Tvec);
+k = pre_exp*exp(-act_energy/Rg./Tvec);
 lnk = log(k);
 plot(1./Tvec,lnk, 'Linewidth', 1.5);
 title('Kinetic constant as function of T');

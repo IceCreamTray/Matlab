@@ -20,7 +20,7 @@ fiL = soda / vol;												% Liquid fraction [-]
 aS = 6 / D;														% Specific solid area - [1/cm]
 aL = fiS * aS / fiL;											% Specific liquid area - [1/cm]
 Tvec = [ 5 17.5 30.6 43] + 273.15;								% K
-diff = Rg * 10^-3 .* Tvec /(96500 * (1/50.1 + 1/197.6));		% Diffusivity coefficient
+diff = Rg * 10^-3 .* Tvec /(96500 * (1/50.1 + 1/197.6))*porosity*10^2;		% Diffusivity coefficient
 rho = 2.13 * 10^-3;												% Kg/cm^3
 vrel = 1;														% cm/s
 mu = 0.087														% Pa*s
@@ -90,7 +90,7 @@ act_energy = mean(Ea_vec)
 
 %% Arrhenius plot
 figure
-k = pre_exp*exp(act_energy/Rg./Tvec);
+k = pre_exp*exp(-act_energy/Rg./Tvec);
 kapp = hm.*k./(hm+k);
 lnk = log(kapp);
 plot(1./Tvec,lnk, 'Linewidth', 1.5);
