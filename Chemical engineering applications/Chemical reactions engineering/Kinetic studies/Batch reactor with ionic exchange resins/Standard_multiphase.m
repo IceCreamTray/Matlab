@@ -68,7 +68,7 @@ for Tidx = 1 : Tvec_len
 	
 	A_vec(Tidx) = par(1);
 	Ea_vec(Tidx) = par(2);
-	
+
 	a = plot(results_t1{Tidx},results_C1{Tidx},time,coutsoda,'o');hold on
 	set(a, 'Color', Lcol{Tidx}, 'LineWidth', 1.25);
 	title('Fitted experimental curves for a multiphase batch reactor, general case');
@@ -88,6 +88,14 @@ pre_exp = mean(A_vec)
 disp('Fitted activation energy: ');
 act_energy = mean(Ea_vec)
 
+%% Diversi k
+figure
+k1 = log(A_vec(1)*exp(-Ea_vec(1)/Rg/Tvec(1)));
+k2 = log(A_vec(2)*exp(-Ea_vec(2)/Rg/Tvec(2)));
+k3 = log(A_vec(3)*exp(-Ea_vec(3)/Rg/Tvec(3)));
+k4 = log(A_vec(4)*exp(-Ea_vec(4)/Rg/Tvec(4)));
+plot(1./Tvec,[k1 k2 k3 k4]);
+
 %% Arrhenius plot
 figure
 k = pre_exp*exp(-act_energy/Rg./Tvec);
@@ -99,7 +107,7 @@ ylabel('lnK');
 xlabel('1/T [1/K]');
 
 %% Lovely message
-disp('poop love');
+%disp('poop love');
 
 %% Error function
 function S = err(par, time, cinsoda, temperature,coutsoda, index)
@@ -128,11 +136,11 @@ function sol = Batch(par, time, cinsoda, temperature)
 	xresin = resin / vol;											% [-]
 	porosity = 0.225;												% [-]
 	D = 650e-4;														% Resins sphere diameter - [cm]
-	fiS = resin / vol;												% Solid fraction [-]
-	fiL = soda / vol;												% Liquid fraction [-]
-	aS = 6 / D;														% Solid specific area - [1/cm]
-	aL = fiS * aS / fiL;											% Liquid specific area - [1/cm]
-	diff = Rg * 10^-3 * temperature /(96500 * (1/50.1 + 1/197.6));	% Diffusivity coefficient
+	fiS = resin /vol*porosity;							% Solid fraction [-]
+	fiL = soda / vol;							% Liquid fraction [-]
+	aS = 6 / D;									% Solid specific area - [1/cm]
+	aL = fiS * aS / fiL;						% Liquid specific area - [1/cm]
+	diff = Rg * 10^-3 * temperature /(96500 * (1/50.1 + 1/197.6))*10^3;	% Diffusivity coefficient
 	rho = 2.13 * 10^-3;												% Kg/cm^3
 	vrel = 1;														% cm/s
 	mu = 0.087														% Pa*s
@@ -156,13 +164,6 @@ function Cprimo = BMi(time,c,par,Tin,Rg,nu,aL,hm)
 	Cprimo = r';
 	
 end
-
-
-
-
-
-
-
 
 
 

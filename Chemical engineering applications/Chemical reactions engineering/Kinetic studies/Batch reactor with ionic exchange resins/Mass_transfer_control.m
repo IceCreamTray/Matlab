@@ -37,7 +37,7 @@ results_C1 = {};
 results_t1 = {};
 
 %% Lovely message
-disp('poop love');
+%disp('poop love');
 	
 %% Inlet data and experimental data check
 for Tidx = 1 : Tvec_len
@@ -82,14 +82,14 @@ function sol = Batch(time, cinsoda, temperature)
 	xresin = resin / vol;											% [-]
 	porosity = 0.225;												% [-]
 	D = 650e-4;														% Resins sphere diameter - [cm]
-	fiS = resin / vol;												% Solid fraction [-]
-	fiL = soda / vol;												% Liquid fraction [-]
-	aS = 6 / D;														% Solid specific area - [1/cm]
-	aL = fiS * aS / fiL;											% Liquid specific area - [1/cm]
-	diff = Rg * 10^-3 * temperature /(96500 * (1/50.1 + 1/197.6))*porosity*10^2;	% Diffusivity coefficient
+	fiS = resin /vol*porosity;							% Solid fraction [-]
+	fiL = soda / vol;							% Liquid fraction [-]
+	aS = 6 / D;									% Solid specific area - [1/cm]
+	aL = fiS * aS / fiL;						% Liquid specific area - [1/cm]
+	diff = Rg * temperature * 2 /(96500^2 * (1/(50.1) + 1/(197.6)))*10^3;% Diffusivity coefficient
 	rho = 1 * 10^-3;												% Kg/cm^3
 	vrel = 1;														% cm/s
-	mu = 0.087;														% Pa*s
+	mu = 0.001/10^4;												% N/cm^2s
 	Rep = rho * vrel * D / mu;										% Reynolds number
 	Sc = mu / rho / diff;											% Schmidt number
 	Sh = 2 + 0.44 * Rep^0.5 * Sc^0.38;								% Sherwood number
