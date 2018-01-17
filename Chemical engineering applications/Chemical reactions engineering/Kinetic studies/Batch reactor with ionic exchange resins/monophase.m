@@ -10,12 +10,6 @@ Rg = 8.314;										% J/K mol
 nu = -1;							
 
 %% Data
-soda = 470 * 1e-3;									% L
-resin = 10 * 1e-3;									% L
-vol = soda + resin;									% L
-phiL = soda / vol;									% [-]
-phiS = resin / vol;									% [-]
-porosity = 0.225;									% [-]
 Tvec = [5 17.5 30.6 43] + 273.15;					% [K]
 
 %% Colors
@@ -25,7 +19,7 @@ Lcol = { [1 0 0] [0 1 0] [0 0 1] [0 0 0] };
 opt = optimset('Display','Iter');
 
 %% Guess on parameters
-par0 = [60 19500];
+par0 = [10 19500];
 
 %% Variables definition
 global results_C1;
@@ -76,9 +70,17 @@ pre_exp = mean(A_vec)
 disp('Fitted activation energy: ');
 act_energy = mean(Ea_vec)
 
+%% Diversi k
+figure
+k1 = log(A_vec(1)*exp(-Ea_vec(1)/Rg/Tvec(1)));
+k2 = log(A_vec(2)*exp(-Ea_vec(2)/Rg/Tvec(2)));
+k3 = log(A_vec(3)*exp(-Ea_vec(3)/Rg/Tvec(3)));
+k4 = log(A_vec(4)*exp(-Ea_vec(4)/Rg/Tvec(4)));
+plot(1./Tvec,[k1 k2 k3 k4]);
+
 %% Arrhenius plot
 figure
-k = pre_exp*exp(act_energy/Rg./Tvec);
+k = pre_exp*exp(-act_energy/Rg./Tvec);
 lnk = log(k);
 plot(1./Tvec,lnk, 'Linewidth', 1.5);
 title('Kinetic constant as function of T');
