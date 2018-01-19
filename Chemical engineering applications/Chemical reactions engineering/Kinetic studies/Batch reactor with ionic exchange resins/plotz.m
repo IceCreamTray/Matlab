@@ -14,4 +14,9 @@ kh = k4;
 Standard_multiphase
 lnk3=lnk;
 
-plot(1./Tvec,lnk1,1./Tvec,lnk2,1./Tvec,lnk3)
+plot(1./Tvec,lnk1,1./Tvec,lnk2,1./Tvec,lnk3,'Linewidth',1.25)
+title('Comparison between kinetic slopes for the three regimes');
+xlabel('1/T [1/K]');
+ylabel('lnk');
+legend('Monophase batch','Multiphase batch in KC',...
+		'Multiphase batch with K_a_p_p','Location','Best');
