@@ -1,6 +1,7 @@
-clc,clear all,close all
+%clc,clear all,close all
 
 % Reaction is R-plus + Naoh = R-na + oh-
+
 %% Read experimental data from xls
 Trials = xlsread('Expdata.xlsx');
 Trials_trimmed = Trials(8:end, :);
@@ -67,17 +68,25 @@ end
 
 %% Fitted parameters for different temperatures
 disp('Fitted pre-exponential factor: ');
-pre_exp = mean(A_vec)
+pre_exp = mean(A_vec);
+disp(mean(A_vec))
 disp('Fitted activation energy: ');
-act_energy = mean(Ea_vec)
+disp(mean(Ea_vec))
+act_energy = mean(Ea_vec);
 
-%% Diversi k
+%% Different k evaluation
 figure
 k1 = log(A_vec(1)*exp(-Ea_vec(1)/Rg/Tvec(1)));
 k2 = log(A_vec(2)*exp(-Ea_vec(2)/Rg/Tvec(2)));
 k3 = log(A_vec(3)*exp(-Ea_vec(3)/Rg/Tvec(3)));
 k4 = log(A_vec(4)*exp(-Ea_vec(4)/Rg/Tvec(4)));
-plot(1./Tvec,[k1 k2 k3 k4]);
+scatter(1./Tvec,[k1 k2 k3 k4]),hold on;
+p = polyfit(1./Tvec,[k1 k2 k3 k4],1);
+f = polyval(p,1./Tvec);
+plot(1./Tvec,f,'Color','Black');
+title('Control on calculated kinetic constants');
+ylabel('kinetic constants');
+xlabel('1/T [1/K]');
 
 
 %% Arrhenius plot
@@ -120,7 +129,7 @@ function sol = Batch(par, time, cinsoda, temperature)
 	xresin = resin /vol;        				% [-]
 	porosity = 0.225;							% [-]
 	D = 650e-4;									% Resins sphere diameter - [cm]
-	fiS = resin /vol*porosity;							% Solid fraction [-]
+	fiS = resin /vol * porosity;				% Solid fraction [-]
 	fiL = soda / vol;							% Liquid fraction [-]
 	aS = 6 / D;									% Solid specific area - [1/cm]
 	aL = fiS * aS / fiL;						% Liquid specific area - [1/cm]

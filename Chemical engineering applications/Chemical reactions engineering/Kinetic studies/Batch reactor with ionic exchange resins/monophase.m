@@ -70,13 +70,19 @@ pre_exp = mean(A_vec)
 disp('Fitted activation energy: ');
 act_energy = mean(Ea_vec)
 
-%% Diversi k
+%% different k evaluation
 figure
 k1 = log(A_vec(1)*exp(-Ea_vec(1)/Rg/Tvec(1)));
 k2 = log(A_vec(2)*exp(-Ea_vec(2)/Rg/Tvec(2)));
 k3 = log(A_vec(3)*exp(-Ea_vec(3)/Rg/Tvec(3)));
 k4 = log(A_vec(4)*exp(-Ea_vec(4)/Rg/Tvec(4)));
-plot(1./Tvec,[k1 k2 k3 k4]);
+scatter(1./Tvec,[k1 k2 k3 k4]),hold on;
+p = polyfit(1./Tvec,[k1 k2 k3 k4],1);
+f = polyval(p,1./Tvec);
+plot(1./Tvec,f,'Color','Black');
+title('Control on calculated kinetic constants');
+ylabel('kinetic constants');
+xlabel('1/T [1/K]');
 
 %% Arrhenius plot
 figure
