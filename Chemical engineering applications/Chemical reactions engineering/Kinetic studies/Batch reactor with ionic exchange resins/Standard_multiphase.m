@@ -22,6 +22,7 @@ par0 = [50 10000];
 global results_C1;
 global results_t1;
 global hm;
+global kapp;
 Tvec_len = length(Tvec);
 results_C1 = {};
 results_t1 = {};
@@ -71,6 +72,10 @@ disp('Fitted pre-exponential factor: ');
 pre_exp = mean(A_vec)
 disp('Fitted activation energy: ');
 act_energy = mean(Ea_vec)
+disp('kinetic constant');
+kappa = pre_exp*exp(-act_energy/Rg/(25+273))
+disp('apparent kinetic constant');
+disp(kapp)
 
 %% Different k evaluation
 figure
@@ -150,6 +155,7 @@ function Cprimo = BMi(time,c,par,Tin,Rg,nu,aL,hm)
 	A = par(1);
 	Ea = par(2);
 	k = A*exp(-Ea/Rg/Tin);
+	global kapp
 	kapp = hm*k/(hm+k);
 	R = kapp*c*aL;
 	r = nu*R;
