@@ -73,6 +73,8 @@ disp(mean(A_vec))
 disp('Fitted activation energy: ');
 disp(mean(Ea_vec))
 act_energy = mean(Ea_vec);
+disp('kinetic constant');
+kappa = pre_exp*exp(-act_energy/Rg/(25+273))
 
 %% Different k evaluation
 figure
@@ -85,8 +87,8 @@ p = polyfit(1./Tvec,[k1 k2 k3 k4],1);
 f = polyval(p,1./Tvec);
 plot(1./Tvec,f,'Color','Black');
 title('Control on calculated kinetic constants');
-ylabel('kinetic constants');
-xlabel('1/T [1/K]');
+ylabel('lnKi');
+xlabel('1/Ti [1/K]');
 
 
 %% Arrhenius plot
