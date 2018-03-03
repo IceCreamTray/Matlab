@@ -483,8 +483,9 @@ function Comparison
     Rinv21 = Rinvk2(1,1:94);
     Rinv22 = Rinvk2(2,1:94);
     Rinv23 = Rinvk2(3,1:94);
-    
+    rnet=Rdir21-Rinv21;
     figure
+	plot(volu*10^3,rnet),hold on
     plot(volu * 10^3, Rdir21, 'LineWidth', 2), hold on, grid on 
     plot(volu * 10^3, Rinv21, 'LineWidth', 2);
     title('Reaction rate of methane steam reforming [Isothermal]');

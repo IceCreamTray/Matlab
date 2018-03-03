@@ -52,7 +52,7 @@ function Non_isothermal_reactor
 		cp_mix = sum(((Ni ./ Ntot)) .* cpi);
 
 		% Add heat duty if wanted
-		Qdot = 300 * 36/19;
+		Qdot = 800 * 36/19;
 
 		% Adiabatic case
 		%Qdot = 0;

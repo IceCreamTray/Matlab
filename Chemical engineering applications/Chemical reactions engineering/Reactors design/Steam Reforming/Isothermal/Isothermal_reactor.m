@@ -128,7 +128,9 @@ function Isothermal_reactor
 	ylabel('Conversion of Methane');
 	ylim([0 1]);
 
-
+	figure
+	temp=ones(1,length(conv_CH4)).*650;
+	plot(temp,conv_CH4)
 	%%
 	% Define yields plots
 	yi_h2_ch4 = ((Ni(:, 2) - Ni0(2)) ./ (Ni0(3))) .* (1/4);	% Defined on the last reaction
