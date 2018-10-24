@@ -1,5 +1,5 @@
 %% PROFILE OF PRESSURE IN A PUNCTURED TANK
-% Finds the profile of pressure through transfer function and through analytical mass balance.
+% Finds the profile of decreasing pressure through transfer function and through analytical mass balance.
 % ------------------------------------------------------------------------------------------
 
 clc, clear all, close all;
@@ -17,7 +17,6 @@ t1 = 0:300;
 % Function in time domain
 Pt = P0 - K .* (1 - exp(-t1 ./ tau)) .* w0;
 
-
 %% ACTUAL PROFILE
 % Constants
 V = 1.5; % m^3
@@ -29,25 +28,35 @@ Patm = 101300; % Pa
 % Material balance solution
 [t,P] = ode23(@Bmi, [0 300], P0, [], A, drho, Patm,V);
 
-% TIME THE TANK TAKES TO GET EMPTY
+% TIME TO REACH EMPTINESS
 % Calculated through the integral of the material balance
-f = @(P) (drho ./ 2 .* V)./(-A.*(drho.*P.*(P-Patm)).^0.5)
-res = integral(f,601300,101300)
+f = @(P) (drho ./ 2 .* V)./(-A.*(drho.*P.*(P-Patm)).^0.5);
+res = integral(f,601300,101300);
 % Calculated through the reverse transform
-tr = (log(1-((P0 - Patm)/w0/K))*tau)*-1
+tr = (log(1-((P0 - Patm)/w0/K))*tau)*-1;
+% Calculated through approximation
+tapp = 4 * tau;
 
+%% DISPLAY
+disp('TIME IT TAKES FOR THE TANK TO GET EMPTY');
+disp('Calculated through material balance [s]:'), disp(res);
+disp('Calculated throught the reverse transform of the TF [s]:'), disp(tr);
+disp('Calculated through approximation [s]:'), disp(tapp);
 
 %% PLOTS
 plot(t1,Pt*10^-3,'Linewidth',2),  hold on
+plot(t,P*10^-3,'Linewidth', 2);
+plot(res,0,'-o', 'Linewidth', 2);
+plot(tr,0,'-o', 'Linewidth', 2);
+plot(tapp,0,'-o', 'Linewidth', 2);
+l = refline(0, 101.3);
+set(l, 'LineStyle', '--', 'Color', 'black');
 title("Pressure profile");
 ylabel("P [kPa]");
 xlabel("t [s]");
-plot(t,P*10^-3,'Linewidth', 2);
-l = refline(0, 101.3);
-set(l, 'LineStyle', '--', 'Color', 'black');
-legend('Approximated profile','Actual profile', 'Atmospheric pressure line');
+legend('Approximated profile','Actual profile', 't_M_a_t [s]', 't_T_r_s [s]', 't_a_p_p [s]', 'Atmospheric pressure line');
 
-
+%% MASS BALANCE
 function [dPdt] = Bmi (t,P,A,drho,Patm,V)
     dPdt = (-A*(drho*P*(P-Patm))^0.5)*(drho/2)^-1*V^-1;
 end
