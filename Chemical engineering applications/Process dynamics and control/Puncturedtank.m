@@ -35,7 +35,7 @@ res = integral(f,601300,101300);
 % Calculated through the reverse transform
 tr = (log(1-((P0 - Patm)/w0/K))*tau)*-1;
 % Calculated through approximation
-tapp = 4 * tau;
+tapp = 5 * tau;
 
 %% DISPLAY
 disp('TIME IT TAKES FOR THE TANK TO GET EMPTY');
@@ -44,17 +44,18 @@ disp('Calculated throught the reverse transform of the TF [s]:'), disp(tr);
 disp('Calculated through approximation [s]:'), disp(tapp);
 
 %% PLOTS
+figure(1)
 plot(t1,Pt*10^-3,'Linewidth',2),  hold on
 plot(t,P*10^-3,'Linewidth', 2);
-plot(res,0,'-o', 'Linewidth', 2);
-plot(tr,0,'-o', 'Linewidth', 2);
-plot(tapp,0,'-o', 'Linewidth', 2);
 l = refline(0, 101.3);
 set(l, 'LineStyle', '--', 'Color', 'black');
+scatter(res,0,50,'filled');
+scatter(tr,0,50,'filled');
+scatter(tapp,0,50,'filled');
 title("Pressure profile");
 ylabel("P [kPa]");
 xlabel("t [s]");
-legend('Approximated profile','Actual profile', 't_M_a_t [s]', 't_T_r_s [s]', 't_a_p_p [s]', 'Atmospheric pressure line');
+legend('Analytical profile','Numerical profile', 'Atmospheric pressure line','t_n_u_m [s]', 't_a_n [s]', 't_a_p_p [s]');
 
 %% MASS BALANCE
 function [dPdt] = Bmi (t,P,A,drho,Patm,V)
